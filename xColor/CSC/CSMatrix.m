@@ -1,10 +1,10 @@
 function img = CSMatrix(img,SourceColorSpace,TargetColorSpace)
-%ANYLRGB2XYZ Convert any linear RGB Color Space defined in RGBColorSpace to XYZ or backwards.
+%ANYLRGB2XYZ Convert any linear RGB Color Space defined in xColorSpace to XYZ or backwards.
 %
 %   RGB-Values expected to between 0 ... 1
 %   XYZ-Values expected relative to Whitepoint e.g. 48cd/m2 for Cinema and 80cd/m2 for ITU709
 
-%% Convert Color Space Names to JColorSpace Objects if needed: 
+%% Convert Color Space Names to xColorSpace Objects if needed: 
 if not(strcmpi(class(SourceColorSpace),'xColorSpace'))
 SourceColorSpace = xColorSpace.cast(SourceColorSpace);
 end
@@ -20,13 +20,13 @@ if strcmpi(class(img),'xImage') && (SourceColorSpace ~= img.ColorSpace)
     %SourceColorSpace = Img.ColorSpace;
 end
 
-%% Convert input types n*m*3 and JImage to Line representation
+%% Convert input types n*m*3 and xImage to Line representation
 [ImgLine, meta] = img2raw(img);
 
 %ImgLine = (calcRGB2XYZMatrix(TargetColorSpace)\(calcRGB2XYZMatrix(SourceColorSpace)*ImgLine'))';
 ImgLine = ((calcRGB2XYZMatrix(TargetColorSpace)\calcRGB2XYZMatrix(SourceColorSpace))*ImgLine')';
 
-%% Convert back from Line represantation to n*m*3 double or JImage if needed
+%% Convert back from Line representation to n*m*3 double or xImage if needed
 img = raw2img(ImgLine, meta);
 
 %% Set correct Colorspace and History if Img is a JImage

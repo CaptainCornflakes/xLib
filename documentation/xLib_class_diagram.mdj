@@ -2299,7 +2299,7 @@
 											"font": "Arial;13;1",
 											"left": 1829,
 											"top": 1135,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "x3PrimaryCS"
 										},
@@ -2334,7 +2334,7 @@
 									"font": "Arial;13;0",
 									"left": 1824,
 									"top": 1128,
-									"width": 320,
+									"width": 329,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAF5GIFJ8m/4X68="
@@ -2371,7 +2371,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1158,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "#redPrim_xy: float/double array",
 											"horizontalAlignment": 0
@@ -2388,7 +2388,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1173,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "#greenPrim_xy: float/double array",
 											"horizontalAlignment": 0
@@ -2405,7 +2405,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1188,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "#bluePrim_xy: float/double array",
 											"horizontalAlignment": 0
@@ -2422,7 +2422,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1203,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "#encWhite_Yxy: float/double array",
 											"horizontalAlignment": 0
@@ -2439,7 +2439,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1218,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "#LPCF: @function",
 											"horizontalAlignment": 0
@@ -2456,7 +2456,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1233,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "#PLCF: @function",
 											"horizontalAlignment": 0
@@ -2473,7 +2473,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1248,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "#deCorrelationMatrix: array [3,3]",
 											"horizontalAlignment": 0
@@ -2490,7 +2490,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1263,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "+fromXYZ: @function",
 											"horizontalAlignment": 0
@@ -2507,7 +2507,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1278,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "+toXYZ: @function",
 											"horizontalAlignment": 0
@@ -2524,7 +2524,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1293,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "+isInGamut: @function",
 											"horizontalAlignment": 0
@@ -2533,7 +2533,7 @@
 									"font": "Arial;13;0",
 									"left": 1824,
 									"top": 1153,
-									"width": 320,
+									"width": 329,
 									"height": 158
 								},
 								{
@@ -2558,7 +2558,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1316,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "+setLPCF(obj, LPCF)",
 											"horizontalAlignment": 0
@@ -2575,7 +2575,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1331,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "+getLPCF(obj)",
 											"horizontalAlignment": 0
@@ -2592,7 +2592,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1346,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "+setPLCF(obj, PLCF)",
 											"horizontalAlignment": 0
@@ -2609,7 +2609,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1361,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "+getPLCF(obj)",
 											"horizontalAlignment": 0
@@ -2626,7 +2626,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1376,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "+setDeCorrelationMatrix(obj, deCorrelationMatrix)",
 											"horizontalAlignment": 0
@@ -2643,7 +2643,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1391,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "+getDeCorrelationMatrix(obj)",
 											"horizontalAlignment": 0
@@ -2660,7 +2660,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1406,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "+setRedPrimary(obj, prim)",
 											"horizontalAlignment": 0
@@ -2677,7 +2677,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1421,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "+setGreenPrimary(obj, prim)",
 											"horizontalAlignment": 0
@@ -2694,7 +2694,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1436,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "+setBluePrimary(obj, prim)",
 											"horizontalAlignment": 0
@@ -2711,7 +2711,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1451,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "+getRedPrimary(obj, mode)",
 											"horizontalAlignment": 0
@@ -2728,7 +2728,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1466,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "+getGreenPrimary(obj, mode)",
 											"horizontalAlignment": 0
@@ -2745,7 +2745,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1481,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "+getBluePrimary(obj, prim)",
 											"horizontalAlignment": 0
@@ -2762,7 +2762,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1496,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "+setEncodingWhite(obj, wp, mode)",
 											"horizontalAlignment": 0
@@ -2779,7 +2779,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1511,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "+getEncodingWhite(obj, mode)",
 											"horizontalAlignment": 0
@@ -2796,7 +2796,7 @@
 											"font": "Arial;13;0",
 											"left": 1829,
 											"top": 1526,
-											"width": 310,
+											"width": 319,
 											"height": 13,
 											"text": "+getGamutHull(obj, type, precision)",
 											"horizontalAlignment": 0
@@ -2805,7 +2805,7 @@
 									"font": "Arial;13;0",
 									"left": 1824,
 									"top": 1311,
-									"width": 320,
+									"width": 329,
 									"height": 233
 								},
 								{
@@ -2843,8 +2843,8 @@
 							"containerChangeable": true,
 							"left": 1824,
 							"top": 1128,
-							"width": 320,
-							"height": 529,
+							"width": 329,
+							"height": 657,
 							"nameCompartment": {
 								"$ref": "AAAAAAF5GIFJ8m/3yyY="
 							},
@@ -3757,7 +3757,7 @@
 							"fillColor": "#ffc1ad",
 							"font": "Arial;13;0",
 							"left": 1832,
-							"top": 1552,
+							"top": 1672,
 							"width": 305,
 							"height": 94,
 							"text": "TODO:"
@@ -3774,7 +3774,7 @@
 							"top": 2016,
 							"width": 297,
 							"height": 73,
-							"text": "2905 TODO:\n- show function not finished yet\n- keyboard shortcuts for showImage"
+							"text": "2905 TODO:\n- show function not finished yet\n- keyboard shortcuts for showImage\n- waveform, graticules, ...jImage line 370-434"
 						},
 						{
 							"_type": "UMLClassView",
@@ -4511,8 +4511,8 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 144,
-											"top": -656,
+											"left": 848,
+											"top": -16,
 											"height": 13
 										},
 										{
@@ -4522,11 +4522,11 @@
 												"$ref": "AAAAAAF5tLOxvnFf7h4="
 											},
 											"font": "Arial;13;1",
-											"left": 1069,
-											"top": 199,
+											"left": 1421,
+											"top": 519,
 											"width": 374,
 											"height": 13,
-											"text": "FUNCTION FILE: lineTriangleIntersect"
+											"text": "FUNCTION FILE"
 										},
 										{
 											"_type": "LabelView",
@@ -4536,8 +4536,8 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 144,
-											"top": -656,
+											"left": 848,
+											"top": -16,
 											"width": 101.8544921875,
 											"height": 13,
 											"text": "(from xLib-model)"
@@ -4550,15 +4550,15 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 144,
-											"top": -656,
+											"left": 848,
+											"top": -16,
 											"height": 13,
 											"horizontalAlignment": 1
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 1064,
-									"top": 192,
+									"left": 1416,
+									"top": 512,
 									"width": 384,
 									"height": 25,
 									"stereotypeLabel": {
@@ -4594,8 +4594,8 @@
 												"$ref": "AAAAAAF5tLVdwnGmafs="
 											},
 											"font": "Arial;13;0",
-											"left": 1069,
-											"top": 222,
+											"left": 1421,
+											"top": 542,
 											"width": 374,
 											"height": 13,
 											"text": "+modes: 'FullLine', 'Any2Any'",
@@ -4611,8 +4611,8 @@
 												"$ref": "AAAAAAF5tLnjrnHQZig="
 											},
 											"font": "Arial;13;0",
-											"left": 1069,
-											"top": 237,
+											"left": 1421,
+											"top": 557,
 											"width": 374,
 											"height": 13,
 											"text": "+output: [flag, intersection]",
@@ -4620,8 +4620,8 @@
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 1064,
-									"top": 217,
+									"left": 1416,
+									"top": 537,
 									"width": 384,
 									"height": 38
 								},
@@ -4645,8 +4645,8 @@
 												"$ref": "AAAAAAF5tLVuMHGsYwI="
 											},
 											"font": "Arial;13;0",
-											"left": 1069,
-											"top": 260,
+											"left": 1421,
+											"top": 580,
 											"width": 374,
 											"height": 13,
 											"text": "+lineTriangleIntersect(line, triangle, mode)",
@@ -4654,8 +4654,8 @@
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 1064,
-									"top": 255,
+									"left": 1416,
+									"top": 575,
 									"width": 384,
 									"height": 23
 								},
@@ -4670,8 +4670,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 72,
-									"top": -328,
+									"left": 424,
+									"top": -8,
 									"width": 10,
 									"height": 10
 								},
@@ -4686,16 +4686,16 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 72,
-									"top": -328,
+									"left": 424,
+									"top": -8,
 									"width": 10,
 									"height": 10
 								}
 							],
 							"font": "Arial;13;0",
 							"containerChangeable": true,
-							"left": 1064,
-							"top": 192,
+							"left": 1416,
+							"top": 512,
 							"width": 384,
 							"height": 169,
 							"nameCompartment": {
@@ -4822,6 +4822,210 @@
 							"width": 313,
 							"height": 94,
 							"text": "2905 TODO:\n- quantize given bitdepth and max (jPixel line247)"
+						},
+						{
+							"_type": "UMLClassView",
+							"_id": "AAAAAAF5y8IlJlemI3M=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"model": {
+								"$ref": "AAAAAAF5y8IlJVekv6I="
+							},
+							"subViews": [
+								{
+									"_type": "UMLNameCompartmentView",
+									"_id": "AAAAAAF5y8IlJlenGx8=",
+									"_parent": {
+										"$ref": "AAAAAAF5y8IlJlemI3M="
+									},
+									"model": {
+										"$ref": "AAAAAAF5y8IlJVekv6I="
+									},
+									"subViews": [
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAF5y8IlJleoYy4=",
+											"_parent": {
+												"$ref": "AAAAAAF5y8IlJlenGx8="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"height": 13
+										},
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAF5y8IlJlepw+0=",
+											"_parent": {
+												"$ref": "AAAAAAF5y8IlJlenGx8="
+											},
+											"font": "Arial;13;1",
+											"left": 1421,
+											"top": 711,
+											"width": 374,
+											"height": 13,
+											"text": "FUNCTION FILE"
+										},
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAF5y8IlJleqcvQ=",
+											"_parent": {
+												"$ref": "AAAAAAF5y8IlJlenGx8="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"width": 101.8544921875,
+											"height": 13,
+											"text": "(from xLib-model)"
+										},
+										{
+											"_type": "LabelView",
+											"_id": "AAAAAAF5y8IlJlerQf8=",
+											"_parent": {
+												"$ref": "AAAAAAF5y8IlJlenGx8="
+											},
+											"visible": false,
+											"font": "Arial;13;0",
+											"height": 13,
+											"horizontalAlignment": 1
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 1416,
+									"top": 704,
+									"width": 384,
+									"height": 25,
+									"stereotypeLabel": {
+										"$ref": "AAAAAAF5y8IlJleoYy4="
+									},
+									"nameLabel": {
+										"$ref": "AAAAAAF5y8IlJlepw+0="
+									},
+									"namespaceLabel": {
+										"$ref": "AAAAAAF5y8IlJleqcvQ="
+									},
+									"propertyLabel": {
+										"$ref": "AAAAAAF5y8IlJlerQf8="
+									}
+								},
+								{
+									"_type": "UMLAttributeCompartmentView",
+									"_id": "AAAAAAF5y8IlJlesy3s=",
+									"_parent": {
+										"$ref": "AAAAAAF5y8IlJlemI3M="
+									},
+									"model": {
+										"$ref": "AAAAAAF5y8IlJVekv6I="
+									},
+									"subViews": [
+										{
+											"_type": "UMLAttributeView",
+											"_id": "AAAAAAF5y8K9IlfgzEg=",
+											"_parent": {
+												"$ref": "AAAAAAF5y8IlJlesy3s="
+											},
+											"model": {
+												"$ref": "AAAAAAF5y8K9Elfdapc="
+											},
+											"font": "Arial;13;0",
+											"left": 1421,
+											"top": 734,
+											"width": 374,
+											"height": 13,
+											"text": "+mode: 'Any2Any'",
+											"horizontalAlignment": 0
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 1416,
+									"top": 729,
+									"width": 384,
+									"height": 23
+								},
+								{
+									"_type": "UMLOperationCompartmentView",
+									"_id": "AAAAAAF5y8IlJletnKY=",
+									"_parent": {
+										"$ref": "AAAAAAF5y8IlJlemI3M="
+									},
+									"model": {
+										"$ref": "AAAAAAF5y8IlJVekv6I="
+									},
+									"subViews": [
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAF5y8J0V1fSGNQ=",
+											"_parent": {
+												"$ref": "AAAAAAF5y8IlJletnKY="
+											},
+											"model": {
+												"$ref": "AAAAAAF5y8J0Q1fP+hw="
+											},
+											"font": "Arial;13;0",
+											"left": 1421,
+											"top": 757,
+											"width": 374,
+											"height": 13,
+											"text": "+lineTriangleIntersect2(line, triangle, mode)",
+											"horizontalAlignment": 0
+										}
+									],
+									"font": "Arial;13;0",
+									"left": 1416,
+									"top": 752,
+									"width": 384,
+									"height": 23
+								},
+								{
+									"_type": "UMLReceptionCompartmentView",
+									"_id": "AAAAAAF5y8IlJleuSkY=",
+									"_parent": {
+										"$ref": "AAAAAAF5y8IlJlemI3M="
+									},
+									"model": {
+										"$ref": "AAAAAAF5y8IlJVekv6I="
+									},
+									"visible": false,
+									"font": "Arial;13;0",
+									"width": 10,
+									"height": 10
+								},
+								{
+									"_type": "UMLTemplateParameterCompartmentView",
+									"_id": "AAAAAAF5y8IlJlevSJg=",
+									"_parent": {
+										"$ref": "AAAAAAF5y8IlJlemI3M="
+									},
+									"model": {
+										"$ref": "AAAAAAF5y8IlJVekv6I="
+									},
+									"visible": false,
+									"font": "Arial;13;0",
+									"width": 10,
+									"height": 10
+								}
+							],
+							"font": "Arial;13;0",
+							"containerChangeable": true,
+							"left": 1416,
+							"top": 704,
+							"width": 384,
+							"height": 144,
+							"nameCompartment": {
+								"$ref": "AAAAAAF5y8IlJlenGx8="
+							},
+							"attributeCompartment": {
+								"$ref": "AAAAAAF5y8IlJlesy3s="
+							},
+							"operationCompartment": {
+								"$ref": "AAAAAAF5y8IlJletnKY="
+							},
+							"receptionCompartment": {
+								"$ref": "AAAAAAF5y8IlJleuSkY="
+							},
+							"templateParameterCompartment": {
+								"$ref": "AAAAAAF5y8IlJlevSJg="
+							}
 						}
 					]
 				},
@@ -8033,7 +8237,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "FUNCTION FILE: lineTriangleIntersect",
+					"name": "FUNCTION FILE",
 					"attributes": [
 						{
 							"_type": "UMLAttribute",
@@ -8096,57 +8300,53 @@
 				},
 				{
 					"_type": "UMLClass",
-					"_id": "AAAAAAF5uZhsZnQnh1o=",
+					"_id": "AAAAAAF5y8IlJVekv6I=",
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "FUNCTION FILE: getAdditional3PrimaryCS",
-					"operations": [
+					"name": "FUNCTION FILE",
+					"attributes": [
 						{
-							"_type": "UMLOperation",
-							"_id": "AAAAAAF5uZkwDHRUszs=",
+							"_type": "UMLAttribute",
+							"_id": "AAAAAAF5y8K9Elfdapc=",
 							"_parent": {
-								"$ref": "AAAAAAF5uZhsZnQnh1o="
+								"$ref": "AAAAAAF5y8IlJVekv6I="
 							},
-							"name": "getAdditional3PrimaryCS",
-							"parameters": [
-								{
-									"_type": "UMLParameter",
-									"_id": "AAAAAAF5uZlfhXRbISQ=",
-									"_parent": {
-										"$ref": "AAAAAAF5uZkwDHRUszs="
-									},
-									"name": "colorSpaceName",
-									"type": ""
-								}
-							]
+							"name": "mode: 'Any2Any'"
 						}
-					]
-				},
-				{
-					"_type": "UMLClass",
-					"_id": "AAAAAAF5uZxR33RproE=",
-					"_parent": {
-						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
-					},
-					"name": "FUNCTION FILE: getAdditionalCamCS(colorSpaceName)",
+					],
 					"operations": [
 						{
 							"_type": "UMLOperation",
-							"_id": "AAAAAAF5uZyuPHST+yM=",
+							"_id": "AAAAAAF5y8J0Q1fP+hw=",
 							"_parent": {
-								"$ref": "AAAAAAF5uZxR33RproE="
+								"$ref": "AAAAAAF5y8IlJVekv6I="
 							},
-							"name": "getAdditionalCamCS",
+							"name": "lineTriangleIntersect2",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
-									"_id": "AAAAAAF5uZziBnSaJWQ=",
+									"_id": "AAAAAAF5y8KsLVfXs7A=",
 									"_parent": {
-										"$ref": "AAAAAAF5uZyuPHST+yM="
+										"$ref": "AAAAAAF5y8J0Q1fP+hw="
 									},
-									"name": "colorSpaceName",
-									"type": ""
+									"name": "line"
+								},
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAF5y8KsLVfYpfE=",
+									"_parent": {
+										"$ref": "AAAAAAF5y8J0Q1fP+hw="
+									},
+									"name": "triangle"
+								},
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAF5y8KsLVfZ2lI=",
+									"_parent": {
+										"$ref": "AAAAAAF5y8J0Q1fP+hw="
+									},
+									"name": "mode"
 								}
 							]
 						}

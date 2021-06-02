@@ -1,9 +1,15 @@
 function [raw, meta] = img2raw(img)
-%% image2raw is a funtion to convert xImages to raw line representation
+%% image2raw is a funtion to convert xPixel/xImage to raw line representation
 %
 %
+
+% check class of input img
 type = class(img);
+
+%case differentiation
 switch type
+    %if class xImage or xPixel:
+    %   store pixel data in raw and delete data in img
     case {'xImage','xPixel'}
         raw = img.getPixel();
         meta = img;
@@ -21,7 +27,7 @@ switch type
             meta.dims = 2;
             meta.height = 1;
             meta.width = size(img,2);
-            warning('Horizontal image representation not recommended! Only for Compatibility with IS-Lib')
+            warning('Horizontal image representation not recommended!')
         elseif (ndims(img) == 3) && (size(img,3)==3)
             % Convert flat image to line
             meta.dims = 3;

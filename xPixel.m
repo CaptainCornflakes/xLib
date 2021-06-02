@@ -336,6 +336,7 @@ classdef xPixel < xBase
                     disp(cellstr(Img.getHistory));
                 case 'plain'
                     Img.showImage(varargin{:});
+                    
                 case {'xychart','xy'}
                     xyChart2(Img,varargin{:});
                 case {'uvchart','uv'}

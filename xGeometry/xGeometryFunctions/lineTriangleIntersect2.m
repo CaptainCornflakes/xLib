@@ -139,7 +139,8 @@ function [intersection, P] = lineTriangleIntersect2(Line, Triangle, varargin)
                         %surface area original triangle = 0.5 * |(vT1 x vT2)|
                         surfTriangle = 0.5 * abs(crossprodT);
                         
-                        % creating vectors
+                        % creating vectors from P to all vectors of the
+                        % triangle
                         vP1 = T1-P; % vector from P to T1
                         vP2 = T2-P; % vetor from P to T2
                         vP3 = T3-P; % vector from P to T3

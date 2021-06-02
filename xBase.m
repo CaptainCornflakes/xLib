@@ -103,19 +103,19 @@ classdef xBase
                 else
                     error('xBase.plus: Can''t add - Image size different');
                 end
-            % jBase + scalar 
+            % xBase + scalar 
             elseif isa(obj1,'xBase') && isscalar(obj2) && isfloat(obj2) && isreal(obj2)
                 obj1.data = obj1.data + repmat(obj2,[size(obj1.data,1),size(obj1.data,2)]);
             elseif isa(obj2,'xBase') && isscalar(obj1) && isfloat(obj1) && isreal(obj1)
                 obj1 = plus(obj2,obj1);
-            % jBase + [1 2 3]
+            % xBase + [1 2 3]
             elseif isa(obj1,'xBase') && (size(obj2,1)==1) && (size(obj2,2)==size(obj1.data,2)) ...
                     && isfloat(obj2) && isreal(obj2)
                 obj1.data = obj1.data + repmat(obj2,[size(obj1.data,1),1]);
             elseif isa(obj2,'xBase') && (size(obj1,1)==1) && (size(obj1,2)==size(obj1.data,2)) ...
                     && isfloat(obj1) && isreal(obj1)
                 obj1 = plus(obj2,obj1);
-            % jBase + vec of same size 
+            % xBase + vec of same size 
             elseif isa(obj1,'xBase') && (size(obj2,1)==size(obj1.data,1)) && ...
                     (size(obj2,2)==size(obj1.data,2)) && isfloat(obj2) && isreal(obj2)
                 obj1 = obj1.setPixel(obj1.getPixel + obj2);
@@ -295,6 +295,9 @@ classdef xBase
     
         %% ---TODO---
         %  implement base path, test img path, ...
+        
+        
+        
         
         %% Get Plot Envrionment
         function plotEngine = get3DPlotEngine()

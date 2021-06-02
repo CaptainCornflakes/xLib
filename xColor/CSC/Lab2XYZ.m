@@ -3,6 +3,14 @@ function img = Lab2XYZ( img, XYZWhitepoint )
 %   You need to specify a Whitepoint as 'D65' for conversion
 %   ToDo: Whitepoint for hdr Images ?
 
+
+% %% --- DEBUG --------------------------------------------------------------
+% img = xPixel([0 0 0; 0.18 0.18 0.18; 0.5 0.5 0.5; 1 0 0; 0 1 0; 0 0 1; 1 1 1])
+% img = img.setColorSpace('Lab');
+% XYZWhitepoint = 'D65_31';
+% 
+% %% ------------------------------------------------------------------------
+
 [img,meta] = img2raw(img);
 
 % Convert from name to XYZ if something like 'D65_31' is supplied

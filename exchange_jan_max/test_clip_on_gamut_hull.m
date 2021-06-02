@@ -35,7 +35,7 @@ mappingVector.show
 
 
 %% calculate intersection
-[flag, intersect] = lineTriangleIntersect(mappingVector, ghLab, 'any2any');
+[flag, intersect] = lineTriangleIntersect2(mappingVector, ghLab, 'any2any');
 
 %%
 show(intersect,[0 0 1], 15)
