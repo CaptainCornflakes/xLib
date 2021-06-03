@@ -477,7 +477,7 @@ classdef x3PrimaryCS < xColorSpace
         %% Create Gamut Boundary descriptor
         function geom = getGamutHull(obj, type, precision)
             %%GETGAMUTHULL creates the Gamut Hull of HullColorSpace
- 
+            % types can be point, pointplane, line, triangle, cusp 
             
             %% Debug:
 %                  clear classes;

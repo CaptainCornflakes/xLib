@@ -1,6 +1,10 @@
 classdef xTriangle < xPoint
-    %XTRIANGLE Summary of this class goes here
-    %   Detailed explanation goes here
+    %xTriangle for representing triangles
+    %          accepting:
+    %           - n*9 arrays
+    %           - n*9 array and index
+    %           - xPixel objects
+    
     
     properties
         % inherited from xBase: name, path, history, data
