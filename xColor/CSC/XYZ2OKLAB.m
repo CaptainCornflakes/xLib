@@ -10,22 +10,28 @@ function img = XYZ2OKLAB(img)
 % https://bottosson.github.io/posts/oklab/
 
 
-    warning('XYZ2Oklab only works for D65 whitepoint')
+    warning('XYZ2Oklab only works for D65 whitepoint and white Y = 1')
 
 % %% ---- DEBUG -------------------------------------------------------------
 % 
-% img = xPixel([0 0 0; 0.18 0.18 0.18; 0.5 0.5 0.5; 1 0 0; 0 1 0; 0 0 1; 1 1 1])
-% img = img.setColorSpace('oklab')
+%    img = xPixel([0.950 1 1.089; ...
+%                  1 0 0; ...
+%                  0 1 0; ...
+%                  0 0 1])
+%
+%    img = img.setColorSpace('oklab')
 % 
+% %    after calculating, imgOklab should be:
+% %        1.000   -0.000   -0.000
+% %        0.450    1.236   -0.019
+% %        0.922   -0.671    0.263
+% %        0.153   -1.415   -0.449
+%
 % %% ------------------------------------------------------------------------
     
     
     %img = raw img data, meta = xobj
     [img,meta] = img2raw(img);
-    
-    % creating empty matrices with size of input img
-    f = zeros(size(img,1),3);
-    index = zeros(size(img,1),3);
     
     % defining matrix M1 for converting from XYZ to cone responses
     M1 = [0.8189330101, 0.3618667424, -0.1288597137; ...
@@ -39,16 +45,18 @@ function img = XYZ2OKLAB(img)
    
       
       
- %%     
+ %% ---- VERSION 01 ------------------------------------------------------- 
     % convert XYZ to approximate cone response
     lms = (M1 * img')'; % transpose img for correct matrix form
     
     % apply nonlinearity
-    lmsNonLin = lms.^(1/3);
+    %lmsNonLin = round(lms.^(1/3), 4);
+    lmsNonLin = nthroot(lms,3); %nthroot for avoiding complex numbers when calc .^(1/3)
     
     % transform to Lab coordinates
     imgOklab = (M2 * lmsNonLin' )';
-    
+      
+%% --- PREPARE OUTPUT -----------------------------------------------------
     img = raw2img(imgOklab, meta);
     
     if isa(img,'xBase')
@@ -65,3 +73,35 @@ function img = XYZ2OKLAB(img)
     
 end
 
+
+
+% %% --- ALTERNATIVE VERSION TO COMPUTE OKLAB VALUES FROM XZY -------------
+
+%     %% convert XYZ to approximate cone response
+%     % creating empty matrix with size of input img to store Oklab data in
+%     imgOklab = zeros(size(img,1),3);
+%     
+%     % iterate over all XYZ data
+%     for i = 1:size(img, 1);
+%         
+%         valXYZ = img(i,1:3);
+%         
+%         % convert XYZ to approximate cone response
+%         lms = (M1 * valXYZ'); % transpose valXYZ for correct matrix form
+%         
+%         % apply nonlinearity
+%         %lmsNonLin = lms.^(1/3);
+%         lmsNonLin = nthroot(lms,3);
+%         
+%         % transform to Lab coordinates
+%         valOklab = (M2 * lmsNonLin );
+%         
+%         valOklabL = valOklab(1);
+%         valOklabA = valOklab(2);
+%         valOklabB = valOklab(3);
+%         
+%         % store Oklab values in imgOklab
+%         imgOklab(i,1) = valOklabL;
+%         imgOklab(i,2) = valOklabA;
+%         imgOklab(i,3) = valOklabB;
+%     end

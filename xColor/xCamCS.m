@@ -150,6 +150,10 @@ classdef xCamCS < xColorSpace
         %% 
         function fun = get.toXYZ(obj)
             switch lower(obj.name)
+                
+                case 'oklab'
+                    fun = @(x)OKLAB2XYZ(x)
+                
                 case 'ciecam02'
                     fun = @(x)CIECAM022XYZ(x,obj.getAdaptationWhite,...
                         obj.adaptField,obj.adaptField,'dim');
