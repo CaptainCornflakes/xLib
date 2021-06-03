@@ -1,4 +1,4 @@
-function [intersection, P] = lineTriangleIntersect2(Line, Triangle, varargin)
+function [intersection, intersectionPoints] = lineTriangleIntersect2(Line, Triangle, varargin)
 %LINETRIANGLEINTERSECT2 Summary of this function goes here
 %   Detailed explanation goes here
 % checks if a line and a triangle intersect
@@ -29,6 +29,7 @@ function [intersection, P] = lineTriangleIntersect2(Line, Triangle, varargin)
         switch lower(varargin{i})
             case 'fullline'
                 FullLine = true;
+                disp('mode ''FullLine'' not yet implemented')
             case 'any2any'
                 Any2Any = true;   
             otherwise
@@ -36,12 +37,10 @@ function [intersection, P] = lineTriangleIntersect2(Line, Triangle, varargin)
         end
     end
 
-    
-%     %% ------------------------------------------------------------------------
-%     %% --------- DEBUG START --------------------------------------------------
-%     %% ------------------------------------------------------------------------
+%     %% ------------------------------------------------------------------
+%     %% --- DEBUG START --------------------------------------------------
 % 
-%     %% single line and triangle
+%     %% --- single line and triangle--------------------------------------
 %     % create test objects
 %     Line = xLine([0 0.2 0.2 1 0.8 0.9]);
 %     Triangle = xTriangle([ 0.9 0.5 0.2 0.2 0.5 0.4 0.5 0.5 0.9 ]);
@@ -50,7 +49,7 @@ function [intersection, P] = lineTriangleIntersect2(Line, Triangle, varargin)
 %     show(Line)
 %     show(Triangle)
 %     
-%     %% 2 lines and 2 triangles
+%     %% --- 2 lines and 2 triangles --------------------------------------
 % 
 %     Line = xLine([0.1 0 0.4 0.5 1 0.5; 0.1 0 0.1 0.1 1 0.1]);
 %     Triangle = xTriangle([0.9 0.5 0.2 0.2 0.7 0.4 0.2 0.5 0.9; ...
@@ -59,20 +58,59 @@ function [intersection, P] = lineTriangleIntersect2(Line, Triangle, varargin)
 %     
 %     show(Line)
 %     show(Triangle)
-%     %% ------------------------------------------------------------------------
-%     %% --------- DEBUG END ----------------------------------------------------
-%     %% ------------------------------------------------------------------------
+%     
+%     %% --- gamut hull ---------------------------------------------------
+%     
+%     % set mode any2any
+%     Any2Any = true;
+%     
+%     % get sRGB gamut hull
+%     Triangle = x3PrimaryCS('sRGB').getGamutHull('triangle',3);
+% 
+%     % CS transformation to lab
+%     pix = xPixel( Triangle ).setColorSpace(x3PrimaryCS( 'sRGB' ) ... %set CS to sRGB
+%                        .setBlackLevel(0).setEncodingWhite(1,'Y'))... %set encoding white and blacklevel properly
+%                        .toXYZ.setColorSpace('oklab').fromXYZ; %set CS to OkLab 
+% 
+%     %store pixel data in gamut hull
+%     ghLab = Triangle.setPoint(pix);
+% 
+%     % plot
+%     hold off
+%     ghLab.show(xPixel(Triangle))
+% 
+%     % creating srcPoint OOG
+%     hold on
+%     srcPoint = xPoint([0.4 0.4 0.09]);
+%     srcPoint.show
+%     
+%     % creating mapping direction
+%     targetPoint = xPoint([0.6, 0, 0]);
+%     % creating line for mapping direction
+%     Line = xLine([srcPoint.data targetPoint.data]);
+%     Line.show
+%     
+%     %axis labeling
+%     xlabel L*
+%     ylabel a*
+%     zlabel b*
+%     grid on
+%     
+%     
+%     %% --- DEBUG END ----------------------------------------------------
+%     %% ------------------------------------------------------------------
 
 
 
-    %% additional vars
+    %% variable declaration
     % get line, triangle and number of lines and triangles
     rawLines = Line.getLine;
-    rawTris = Triangle.getTriangle;
-    
     numLines = getNumElements(Line);
+    
+    rawTris = Triangle.getTriangle;
     numTris = getNumElements(Triangle);
     
+    intersectionPoints = xPoint();
     
     %% INPUT ARGS = xLine and xTriangle
     if isa(Line, 'xLine') && isa(Triangle, 'xTriangle')
@@ -81,14 +119,14 @@ function [intersection, P] = lineTriangleIntersect2(Line, Triangle, varargin)
             for i = 1:numLines % 1. check every line
                 
                 % index of current line
-                iL = i;
+                %iL = i;
                 
                 % get start- and endpoints of current line (transposed)
                 L1 = rawLines(i,1:3)';
                 L2 = rawLines(i,4:6)';
                 
                 % get directional vector from L1 to L2
-                vL = L2-L1;      
+                vL = L2-L1;
                 
                 for ii = 1:numTris % 2. with every triangle
                     
@@ -131,56 +169,95 @@ function [intersection, P] = lineTriangleIntersect2(Line, Triangle, varargin)
                         % given that the point P lies on the surface of an 
                         % triangle (T1,T2,T3), the surface area of the
                         % plane A (T1, T2, T3, P) should be smaller than the 
-                        % surface area of the original triangle
+                        % surface area of the original triangle.
                         % therefore the calculations below are made to
                         % check, if P lies within the triangle.
+                        % basic idea from
+                        % https://prlbr.de/2014/liegt-der-punkt-im-dreieck{
                         
                         
-                        %surface area original triangle = 0.5 * |(vT1 x vT2)|
-                        surfTriangle = 0.5 * abs(crossprodT);
+                        % the surface area of a triangle is calculated as follows: 
+                        % surfTriangle = 0.5 * |(vT1 x vT2)|
+                        % whereby the magnitude of a vector is calculated as sqrt(x^2+y^2+z^2)
+                        surfTriangle = 0.5 * sqrt((crossprodT(1)^2 + crossprodT(2)^2 + crossprodT(3)^2));
+                        
                         
                         % creating vectors from P to all vectors of the
                         % triangle
-                        vP1 = T1-P; % vector from P to T1
-                        vP2 = T2-P; % vetor from P to T2
-                        vP3 = T3-P; % vector from P to T3
+                        vPT1 = T1-P; % vector from P to T1
+                        vPT2 = T2-P; % vetor from P to T2
+                        vPT3 = T3-P; % vector from P to T3
                         
-                        % calculating the surface area of T1,T2,T3,P as two
-                        % triangles
-                        surfTriangleTemp1 = 0.5 * abs(cross(vP1, vP2)); % triangle 1
-                        surfTriangleTemp2 = 0.5 * abs(cross(vP1, vP3)); % triangle 1
                         
-                        surfA = surfTriangleTemp1 + surfTriangleTemp2;
+                        % since there are three possibillities to build a triangle through P with T1,T2,T3, 
+                        % all possible combinations of connecting the
+                        % points via 2 triangles to a plane must be
+                        % considered.
                         
-                        if surfTriangle >= surfA
+                        % crossproducts of all possible triangles using P
+                        % and 2 points of the original triangle
+                        crossTemp1 = cross(vPT1, vPT2);
+                        crossTemp2 = cross(vPT1, vPT3);
+                        crossTemp3 = cross(vPT2, vPT3);
+                        
+                        % calculating the surface area (plane) of T1,T2,T3,P as two
+                        % triangles for each combination
+                        surfTriangleTemp1 = 0.5 * sqrt((crossTemp1(1)^2 + crossTemp1(2)^2 + crossTemp1(3)^2)); % surface area temp triangle 1
+                        surfTriangleTemp2 = 0.5 * sqrt((crossTemp2(1)^2 + crossTemp2(2)^2 + crossTemp2(3)^2)); % surface area temp triangle 2
+                        surfPlane1 = surfTriangleTemp1 + surfTriangleTemp2; % calc surface of plane 1
+                        
+                        surfTriangleTemp3 = 0.5 * sqrt((crossTemp1(1)^2 + crossTemp1(2)^2 + crossTemp1(3)^2)); % surface area temp triangle 1
+                        surfTriangleTemp4 = 0.5 * sqrt((crossTemp3(1)^2 + crossTemp3(2)^2 + crossTemp3(3)^2)); % surface area temp triangle 2
+                        surfPlane2 = surfTriangleTemp3 + surfTriangleTemp4; % calc surface of plane 2
+                        
+                        surfTriangleTemp5 = 0.5 * sqrt((crossTemp2(1)^2 + crossTemp2(2)^2 + crossTemp2(3)^2)); % surface area temp triangle 1
+                        surfTriangleTemp6 = 0.5 * sqrt((crossTemp3(1)^2 + crossTemp3(2)^2 + crossTemp3(3)^2)); % surface area temp triangle 2
+                        surfPlane3 = surfTriangleTemp5 + surfTriangleTemp6; % calc surface of plane 3
+                        
+                        surfPlanes = [surfPlane1; surfPlane2; surfPlane3];
+                        
+                        %to avoid quadrangle with intersecting edges, the
+                        %surface area is defined by the max of the possible
+                        %combinations
+                        surfPlane = max(surfPlanes);
+                        
+                        % check if surface of triangle is greater than 
+                        if surfTriangle >= surfPlane
                             % intersection true
                             intersection = true;
                         
-                            disp(['Line ', num2str(i), ' intersects with Triangle ', num2str(ii), ' at Point: ' ]);
-                            disp(num2str(P));
-                        
-                            hold on
-                            plot3(P(1), P(2), P(3), '*r')
-                         
-%                          %vector from T1 to possible intersection point
-%                          vP = P - T1
-%                          
-%                          dot1 = dot(vP, vT1)
-%                          dot2 = dot(vP, vT2)
-%                          
+                            
+                            
+                            
+                            %triangles involved in the intersection
+                            % store as raw triangle data
+                            %intersectedTriangle = [T1, T2, T3]; 
+                            
+                            
+                            
+%                             % display intersection points and T1,T2,T3 of
+%                             % respective triangle
+%                             disp(['Line ', num2str(i), ' intersects with Triangle ', num2str(ii), ' at Point: ' ]);
+%                             disp(num2str(P));
+%                             hold on
+%                             plot3(P(1), P(2), P(3), '*r')
+%                             plot3(T1(1), T1(2), T1(3), 'om', 'Markersize', 12);
+%                             plot3(T2(1), T2(2), T2(3), 'om', 'Markersize', 12);
+%                             plot3(T3(1), T3(2), T3(3), 'om', 'Markersize', 12);
+                           
+                            % intersection points
+                            %store as raw point data
 
-%                              plot3(P(1), P(2), P(3), 'og')
-                        
-                       
+
                          
                         else
                             intersection = false;
                         end
                     end
-
-                    
                 end
             end
+            
+            %% store the intersection points in an xPoint obj
         end
         
     end
