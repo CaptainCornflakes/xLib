@@ -1,7 +1,10 @@
 %% creating sRGB in IPT
-gh = x3PrimaryCS('p3d65').getGamutHull('triangle',17);
+%funktioniert noch
+gh = x3PrimaryCS('sRGB').getGamutHull('triangle',12);
 
-%gh2.show
+%funktioniert nicht mehr
+gh = x3PrimaryCS('sRGB').getGamutHull('triangle',3);
+
 % CS transformation
 pix = xPixel( gh ).setColorSpace(x3PrimaryCS( 'sRGB' ) ... %set CS to sRGB
       .setBlackLevel(0).setEncodingWhite(1,'Y'))... %set encoding white and blacklevel properly
@@ -18,32 +21,39 @@ ghLab.show(xPixel(gh))
 
 %% creating srcPoint OOG
 hold on
-srcPoint = xPoint([0.02 0.08 0.09]);
-srcPoint.show
 
-xlabel I
-ylabel P
-zlabel T
-grid on
+srcPoints = [0.02 0.08 0.09; 0 0 -0.1]
+targetPoint = [0.06 0 0]
+%srcPoint = xPoint([0.02 0.08 0.09; 0 0 -0.1]);
+%srcPoint.show
+
+% grid on
 %% creating mapping direction
-targetPoint = xPoint([0.06, 0, 0]);
+%targetPoint = xPoint([0.06 0 0]);
 
 %% creating line for mapping direction
-mappingVector = xLine([srcPoint.data targetPoint.data]);
-mappingVector.show
+mappingLines = xLine([srcPoints(1,:), targetPoint; srcPoints(2,:), targetPoint]);
+%mappingLines = xLine([srcPoints(1,:), targetPoint]);
+mappingLines.show
 
 
 
 %% calculate intersection
-[flag, intersect] = lineTriangleIntersect2(mappingVector, ghLab, 'any2any');
+[flag2, intersect2] = lineTriangleIntersect2(mappingLines, ghLab, 'any2any');
+%[flag, intersect] = lineTriangleIntersect(mappingLines, ghLab, 'any2any');
 
 %%
-show(intersect,[0 0 1], 15)
-
-xlabel I
-ylabel P
-zlabel T
+%show(intersect,[0 0 1], 15)
+%%
+xlabel L*
+ylabel a*
+zlabel b*
 grid on
+ax = gca;               % get the current axis
+ax.Clipping = 'off';    % turn clipping off
 
 
+%% get triangles from ghLab
+
+%trianglesGhLab = ghLab.getTriangle;
 
