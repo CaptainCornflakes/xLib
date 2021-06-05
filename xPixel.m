@@ -171,6 +171,10 @@ classdef xPixel < xBase
         end
         %% is inGamut
         function idx = isInGamut(obj)
+        % input is an xPixel or xImage obj with a defined x3PrimaryCS
+        % output is an array with a logical for each input pixel
+        % 0 == px is OOG (out of gamut)
+        % 1 == px is in gamut
             if ~obj.isLinear
                 error('isInGamut only works with linearized images')
             end
@@ -288,6 +292,8 @@ classdef xPixel < xBase
         
         %% insert
         function obj = insert(obj, obj2, idx)
+        % overrides existing pixel data at index
+        % idx must be an n*1 array with logical data inside
             if islogical(idx) && isa(obj2,'xPixel')
                 if size(idx,1) == obj.getNumElements && size(idx,2) == 1 && sum(idx) == obj2.getNumElements
                     obj.data(idx,:) = obj2.data;

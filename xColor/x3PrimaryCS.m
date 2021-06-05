@@ -583,7 +583,7 @@ classdef x3PrimaryCS < xColorSpace
                     vertices = cat(1,pp{1}.getPixel, pp{2}.getPixel, pp{3}.getPixel,...
                         pp{4}.getPixel, pp{5}.getPixel, pp{6}.getPixel);
                     
-                    % Building Bloch 1: Start setting up index for all starting points
+                    % Building Block 1: Start setting up index for all starting points
                     bVec = (1:1:(precision-1)^2)';
                     % Building Block 2: Offset to account for step from plane border to next line
                     offs = reshape(repmat(1:1:(precision-1),(precision-1),1),1,(precision-1)^2)';
