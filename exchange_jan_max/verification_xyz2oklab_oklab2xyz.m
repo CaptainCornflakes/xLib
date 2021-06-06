@@ -3,7 +3,7 @@
 
 %% 1. creating XYZ test img
 % specified testcolors from:    https://bottosson.github.io/posts/oklab/
-imgXYZ1 = xImage(xPixel([0.950 1 1.089; 1 0 0; 0 1 0; 0 0 1])).setColorSpace('XYZ');
+imgXYZ1 = xImage(xPixel([0.950 1 1.089; 1 0 0; 0 1 0; 0 0 1])).setColorSpace(x3PrimaryCS('XYZ'));
 disp('XYZ values imgXYZ1: ') 
 imgXYZ1.getPixel
 

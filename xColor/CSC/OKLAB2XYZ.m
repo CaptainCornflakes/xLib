@@ -10,7 +10,7 @@ function img = OKLAB2XYZ(img)
 % https://bottosson.github.io/posts/oklab/
 
 
-%% ---- DEBUG -------------------------------------------------------------
+% ---- DEBUG -------------------------------------------------------------
 % 
 %    img = xPixel([1 0 0; ...
 %                  0.450 1.236 -0.019; ...
@@ -18,14 +18,14 @@ function img = OKLAB2XYZ(img)
 %                  0.153 -1.415 -0.449]);
 % 
 %    img = img.setColorSpace('oklab');
-% 
-% %    after calculating, imgXYZ should be:
-% %        0.950   1.000   1.089
-% %        1.000   0.000   0.000
-% %        0.000   1.000   0.000
-% %        0.000   0.000   1.000
 
-%% ------------------------------------------------------------------------
+%    after calculating, imgXYZ should be:
+%        0.950   1.000   1.089
+%        1.000   0.000   0.000
+%        0.000   1.000   0.000
+%        0.000   0.000   1.000
+
+% ------------------------------------------------------------------------
 
 
 
@@ -34,9 +34,7 @@ function img = OKLAB2XYZ(img)
      %img = raw img data, meta = xobj
     [imgOklab,meta] = img2raw(img);
     
-    
-    %get whitepoint
-    white = xColorSpace.getWhitePoint( 'd65_31' );
+
     
     %% matrices
     % defining inverse matrix M1 for converting from cone responses to XYZ
@@ -65,6 +63,7 @@ function img = OKLAB2XYZ(img)
 
 %% --- PREPARE OUTPUT -----------------------------------------------------
     img = raw2img(imgXYZ, meta);
+    
     
     if isa(img,'xBase')
         img = img.setHistory(['converted from Oklab to XYZ with whitepoint: D65']);

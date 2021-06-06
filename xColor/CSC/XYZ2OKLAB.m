@@ -10,7 +10,7 @@ function img = XYZ2OKLAB(img)
 % https://bottosson.github.io/posts/oklab/
 
 
-    warning('XYZ2Oklab only works for D65 whitepoint and white Y = 1')
+    warning('XYZ2Oklab only works for D65 whitepoint and Y = 1')
 
 % %% ---- DEBUG -------------------------------------------------------------
 % 
@@ -32,7 +32,7 @@ function img = XYZ2OKLAB(img)
     
     %img = raw img data, meta = xobj
     [img,meta] = img2raw(img);
-    
+
     % defining matrix M1 for converting from XYZ to cone responses
     M1 = [0.8189330101, 0.3618667424, -0.1288597137; ...
           0.0329845436, 0.9293118715, 0.0361456387; ...

@@ -180,6 +180,7 @@ classdef x3PrimaryCS < xColorSpace
                         obj.adaptField = [];
                         obj.veilingGlare = [];
                         obj.axisName = {'X','Y','Z'};
+                        
                     otherwise
                         obj.name = false;
                     end

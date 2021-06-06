@@ -29,9 +29,9 @@ tris.select(1).getTriangle
 %% how to insert an pixel at specific idx
 % define pixel obj and the px that will be inserted
 pixels = (xPixel( [ 0 0 0; 1 1 1; 2 2 2; 3 3 3; 4 4 4 ] ) )
-newPix = xPixel([9 9 9])
+newPix = xPixel([9 9 9; 10 10 10])
 %create n*1 array with logical values
-idx = [false;true;false;false;false];
+idx = [false;true;false;false;true];
 % insert new pixel at idx 2
 newPixels = pixels.insert(newPix, idx);
 
