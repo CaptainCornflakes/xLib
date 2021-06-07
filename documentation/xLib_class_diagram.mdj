@@ -394,13 +394,67 @@
 											"underline": true,
 											"text": "+get3DPlotEngine()",
 											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAF55jxsulgFvr0=",
+											"_parent": {
+												"$ref": "AAAAAAF5DY7Fl2fHKB8="
+											},
+											"model": {
+												"$ref": "AAAAAAF55jxstFgCc9U="
+											},
+											"font": "Arial;13;0",
+											"left": 397,
+											"top": 567,
+											"width": 399,
+											"height": 13,
+											"underline": true,
+											"text": "+getMatrix(mName)",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAF55juYIVfzp60=",
+											"_parent": {
+												"$ref": "AAAAAAF5DY7Fl2fHKB8="
+											},
+											"model": {
+												"$ref": "AAAAAAF55juYFFfw4xg="
+											},
+											"font": "Arial;13;0",
+											"left": 397,
+											"top": 582,
+											"width": 399,
+											"height": 13,
+											"underline": true,
+											"text": "+getBasePath()",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAF55jwQe1f8pCk=",
+											"_parent": {
+												"$ref": "AAAAAAF5DY7Fl2fHKB8="
+											},
+											"model": {
+												"$ref": "AAAAAAF55jwQdFf5ia4="
+											},
+											"font": "Arial;13;0",
+											"left": 397,
+											"top": 597,
+											"width": 399,
+											"height": 13,
+											"underline": true,
+											"text": "+getImagePath()",
+											"horizontalAlignment": 0
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 392,
 									"top": 412,
 									"width": 409,
-									"height": 158
+									"height": 203
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -1586,8 +1640,8 @@
 							},
 							"fillColor": "#ffeaad",
 							"font": "Arial;13;0",
-							"left": 208,
-							"top": 112,
+							"left": 224,
+							"top": 152,
 							"width": 184,
 							"height": 120,
 							"text": "SYMBOLS\n\n+    public\n#    protected\n      private\n_    static"
@@ -4070,7 +4124,7 @@
 							"top": 2008,
 							"width": 337,
 							"height": 94,
-							"text": "2905 TODO:\n- setLine(6params) not implementet"
+							"text": "2905 TODO:\n- setLine(6params) not implemented"
 						},
 						{
 							"_type": "UMLClassView",
@@ -4968,13 +5022,30 @@
 											"height": 13,
 											"text": "+lineTriangleIntersect2(line, triangle, mode)",
 											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAF55jt+7Fftpew=",
+											"_parent": {
+												"$ref": "AAAAAAF5y8IlJletnKY="
+											},
+											"model": {
+												"$ref": "AAAAAAF55jt+1Vfq4F4="
+											},
+											"font": "Arial;13;0",
+											"left": 1421,
+											"top": 772,
+											"width": 374,
+											"height": 13,
+											"text": "+Operation1()",
+											"horizontalAlignment": 0
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 1416,
 									"top": 752,
 									"width": 384,
-									"height": 23
+									"height": 38
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -5312,6 +5383,44 @@
 								"$ref": "AAAAAAF5DY7FlWe+fHY="
 							},
 							"name": "get3DPlotEngine",
+							"isStatic": true
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAF55jxstFgCc9U=",
+							"_parent": {
+								"$ref": "AAAAAAF5DY7FlWe+fHY="
+							},
+							"name": "getMatrix",
+							"isStatic": true,
+							"parameters": [
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAF55jyVf1gJFhw=",
+									"_parent": {
+										"$ref": "AAAAAAF55jxstFgCc9U="
+									},
+									"name": "mName",
+									"type": ""
+								}
+							]
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAF55juYFFfw4xg=",
+							"_parent": {
+								"$ref": "AAAAAAF5DY7FlWe+fHY="
+							},
+							"name": "getBasePath",
+							"isStatic": true
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAF55jwQdFf5ia4=",
+							"_parent": {
+								"$ref": "AAAAAAF5DY7FlWe+fHY="
+							},
+							"name": "getImagePath",
 							"isStatic": true
 						}
 					]
@@ -8349,6 +8458,14 @@
 									"name": "mode"
 								}
 							]
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAF55jt+1Vfq4F4=",
+							"_parent": {
+								"$ref": "AAAAAAF5y8IlJVekv6I="
+							},
+							"name": "Operation1"
 						}
 					]
 				}

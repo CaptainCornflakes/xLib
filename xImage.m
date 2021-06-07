@@ -27,6 +27,18 @@ classdef xImage < xPixel
                             obj = xImage(double(imread('peppers.png'))/255)...
                                 .setHistory('reading MATLAB example image: peppers.png')...
                                 .setColorSpace('sRGB').setName('MATLAB_Peppers.png').linearize;
+                        
+                        case {'isabellarec709', 'isabella709', 'isabellarec'}
+                            obj = xImage();
+                            obj = obj.read(fullfile(xBase.getImagePath(), 'isabella_rec709.dpx')) ...
+                                    .setColorSpace(x3PrimaryCS('rec709'));
+                                
+                                
+%                         case {'isabella', 'isabella_logc',}
+%                             obj = xImage();
+%                             obj = obj.read(fullfile(xBase.getImagePath(), 'isabella_ARRI_LogC_v3_EI800.png')) ...
+%                                     .setColorSpace(x3PrimaryCS('alexawg'));
+                         
                         case('testcolors')
                             %obj = xImage();
                             obj.name = 'testcolors';
@@ -413,7 +425,7 @@ classdef xImage < xPixel
                     
                     imwrite(uint16(img.getImage*65535),fullfile(img.path,[img.name '.' format]),...
                         'Compression','none');
-                    disp(['jImage.Write: 48 bit Tiff image "' img.name '"has been written to:' img.path]);
+                    disp(['xImage.Write: 48 bit Tiff image "' img.name '"has been written to:' img.path]);
                     
                 case 'exr' %Implemented 07.08.2012
                     disp('xImage.Write: Writing 48 bit EXR Image');

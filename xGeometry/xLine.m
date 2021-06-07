@@ -162,7 +162,7 @@ classdef xLine < xPoint
             numElements = size(obj.idx,1);
         end
         
-        
+%%        lineTriangleIntersect has been implemented as a separate xGeometryFunction
 %         %% linetriangleintersect
 %         function [flag, intersection] = lineTriangleIntersect2(Line,Triangle,varargin)
 %             % start function with both modes disabled

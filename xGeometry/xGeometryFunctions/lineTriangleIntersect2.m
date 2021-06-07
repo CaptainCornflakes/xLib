@@ -109,7 +109,7 @@ function [intersectionIdx, intersectionPoints] = lineTriangleIntersect2(Line, Tr
     numTris = getNumElements(Triangle);
     
     intersectionPoints = zeros(numLines,3);
-    intersectionIdx = logical([zeros(numLines,1)]);
+    intersectionIdx = logical(zeros(numLines,1)); %#ok<LOGL>
     
     %% INPUT ARGS = xLine and xTriangle
     if isa(Line, 'xLine') && isa(Triangle, 'xTriangle')
@@ -221,7 +221,7 @@ function [intersectionIdx, intersectionPoints] = lineTriangleIntersect2(Line, Tr
                         if surfTriangle >= surfPlane
                            
                             % intersection true
-                            intersectionIdx(i) = true;
+                            intersectionIdx(i) = true
                             intersectionPoints(i,:) = P';
                             
 
@@ -229,39 +229,21 @@ function [intersectionIdx, intersectionPoints] = lineTriangleIntersect2(Line, Tr
                             % respective triangle
                             disp(['Line ', num2str(i), ' intersects with Triangle ', num2str(ii), ' at Point: ' ]);
                             disp(num2str(P));
-                            hold on
-                            plot3(P(1), P(2), P(3), '*r')
-                            plot3(T1(1), T1(2), T1(3), 'om', 'Markersize', 12);
-                            plot3(T2(1), T2(2), T2(3), 'om', 'Markersize', 12);
-                            plot3(T3(1), T3(2), T3(3), 'om', 'Markersize', 12);
+%                            hold on
+%                            plot3(P(1), P(2), P(3), '*r')
+%                            plot3(T1(1), T1(2), T1(3), 'om', 'Markersize', 12);
+%                            plot3(T2(1), T2(2), T2(3), 'om', 'Markersize', 12);
+%                            plot3(T3(1), T3(2), T3(3), 'om', 'Markersize', 12);
                             
                             % intersection points
                             %store as raw point data
-
-                        else
-                            intersectionIdx(i) = false;
                         end
                     end
                 end
             end
-            
-            %% store the intersection points in an xPoint obj?
         end
         
     end
     
-    
-
-
-
-
-
-
-
-
-
-
-
-
 end
 

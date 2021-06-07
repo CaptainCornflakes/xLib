@@ -4,11 +4,8 @@ function [ imgGamutMapped ] = applyGamutMapping(img, gmaName, mappingColorSpace,
 % destination colorspace
 %   inputs are img, gmaName and varargin
 %   valid gmaNames are:
-%       
+%       - 'SCLIP'
 
-
-%       - 'clip', 'clamp'
-%       - 'wminde'
 
     % warning
     if ~img.isLinear
@@ -18,18 +15,16 @@ function [ imgGamutMapped ] = applyGamutMapping(img, gmaName, mappingColorSpace,
     
     
     % make sure mapping color space is xColorSpace and set correct encoding white
-    mappingColorSpace = xCamCS(mappingColorSpace).setAdaptationWhite(img.getColorspace.getAdaptationWhite)
-    
-    %% TODO: fall unterscheidung xPixel, xImage?
-    
+    mappingColorSpace = xCamCS(mappingColorSpace).setAdaptationWhite(img.getColorSpace.getAdaptationWhite)
 
     
+    
+    %% TODO: fall unterscheidung xPixel, xImage?
+
     switch lower(gmaName)
         case 'sclip'
-            imgGamutMapped = img.gmaSCLIP(img, mappingColorSpace);
-            
-    
-    
+            [imgGamutMapped]= gmaSCLIP(img, mappingColorSpace, varargin);
+    end       
     
 end
 

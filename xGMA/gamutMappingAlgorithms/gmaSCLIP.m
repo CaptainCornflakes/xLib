@@ -1,4 +1,4 @@
-function [imgGamutMapped] = gmaSCLIP(img,mappingColorSpace)
+function [imgGamutMapped] = gmaSCLIP(img,mappingColorSpace, varargin)
 %SCLIP GamutMappingAlgorithm
     % applies clipping on gamut hull of target colorspace towards center of lightness axis for all OOG colors
 
@@ -28,6 +28,7 @@ function [imgGamutMapped] = gmaSCLIP(img,mappingColorSpace)
 
 
     %% inits
+    precision = 32;
     mappingColorSpace = xCamCS(mappingColorSpace); % make sure mappingColorSpace is an xCamCS obj
     targetColorSpace = img.getColorSpace; % def targetColorSpace
     
@@ -41,12 +42,12 @@ function [imgGamutMapped] = gmaSCLIP(img,mappingColorSpace)
     %% build lines where P1 = OOG color and P2 = mappingDirection
     oogRawPoints = oogPxOklab.getPixel; % get rawPoints of all OOG colors
     
-    % set point for mapping direction to center of lightness axis
-    mappingPoint = xPixel(img.colorSpace.getEncodingWhite./2).setColorSpace(targetColorSpace);
+    % set point for maximum of lightness axis of targetCS
+    mappingPoint = xPixel(img.colorSpace.getEncodingWhite).setColorSpace(targetColorSpace);
     % transfer them into mapping color space
     mappingPoint = mappingPoint.setColorSpace(mappingColorSpace).fromXYZ
-    % get the raw mapping point as 1*3 array
-    rawMappingPoint = mappingPoint.getPixel
+    % get the raw mapping point and calculate the center of the lightness axis
+    rawMappingPoint = mappingPoint.getPixel./2
     
     %% build mapping lines
     % create one point in center of lightness axis for each OOG color
@@ -66,25 +67,48 @@ function [imgGamutMapped] = gmaSCLIP(img,mappingColorSpace)
     % create xTriangle obj
     ghmCS = gamutHullTargetCS.setPoint(ghmCSpx);
     
-    %% show target gamut and mapping lines 
-    mappingLines.show
-    ghmCS.show(xPixel(gamutHullTargetCS))
-    xlabel L*
-    ylabel a*
-    zlabel b*
+
+
+%             end
+%         end
+%     end
+   
      
     %% find intersection of mapping lines and gamut hull of target CS in mapping CS
     [flag, intersectionPoints] = lineTriangleIntersect2(mappingLines, ghmCS, 'any2any');
     
     %% convert the mapped points back to the target color space
-    intersectOklab = xPixel(intersectionPoints).setColorSpace('oklab');
-    intersectionP = intersectOklab.toXYZ.setColorSpace(targetColorSpace).fromXYZ;
-    %%
-    imgGamutMapped = img;
+    intersectMappingSpace = xPixel(intersectionPoints).setColorSpace(mappingColorSpace);
+    intersectionP = intersectMappingSpace.toXYZ.setColorSpace(targetColorSpace).fromXYZ;
+    %% insert gamputmapped pixels in original img at the respective idx
     idxList = not(img.isInGamut);
-    %%insert gamputmapped pixels at the respective idx
+    imgGamutMapped = img; %#ok<NASGU>
     imgGamutMapped = insert(img, intersectionP, idxList);
    
+    %% visualization of mapping
+%     if isa(varargin{1}, 'char')
+%                     switch lower(varargin{1})
+    
+    if nargin > 2
+        for i = 1:size(varargin(1))
+%            if isa(varargin{i}, 'char')
+                switch lower(varargin{i,1}{1})
+                    case {'visualize', 'vis'}
+                        figure;
+                        ghmCS.show(xPixel(gamutHullTargetCS))
+                        mappingLines.show
+                        hold on
+                        P = intersectMappingSpace.getPixel
+                        for ii = 1:getNumElements(intersectMappingSpace)
+                            plot3(P(i,1), P(i,2), P(i,3), '*r')
+                        end
+                        
+                        xlabel(mappingColorSpace.getAxisName(1));
+                        ylabel(mappingColorSpace.getAxisName(2));
+                        zlabel(mappingColorSpace.getAxisName(3));
+               end
+        end
+    end
     
 end
 

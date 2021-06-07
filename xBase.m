@@ -1,7 +1,11 @@
 classdef xBase
     %xBASE class
     %    contains basic functions
-    
+    %
+    % ---------------------------------------------------------------------
+    %        SET PATHS FOR xLib FRAMEWORK AT THE END OF THIS FILE
+    % ---------------------------------------------------------------------
+ 
     %% PROPERTIES
     properties (SetAccess = protected)
         name
@@ -89,8 +93,6 @@ classdef xBase
             numElements = size(obj.data,1);
       end
       
-      %% ---TODO---
-      %  implementation of operators from jBase
       %% ToDo: Implement all operators from:
         % http://www.mathworks.com/help/matlab/matlab_oop/implementing-operators-for-your-class.html
         % use .data to make it compatible with geometry and LUTs
@@ -279,25 +281,81 @@ classdef xBase
         function obj = abs( obj )
                 obj.data = abs( obj.data );
         end
-      
-      %% --------------------------------------------------------------------------------------------------------------------
  
     end
     
     %% useful static methods
     methods(Static)
     
-        %% ---TODO---
-        %  implement base path, test img path, ...
-        
-        
-        
-        
         %% Get Plot Envrionment
         function plotEngine = get3DPlotEngine()
             plotEngine = 'hg2';
         end
        
+         %% useful matrices
+        function m = getMatrix(mName)
+            switch lower(mName)
+                case 'bradford'
+                    % source: http://www.brucelindbloom.com/index.html?Eqn_ChromAdapt.html
+                    m =  [0.8951000  0.2664000 -0.1614000;...
+                        -0.7502000  1.7135000  0.0367000;...
+                        0.0389000 -0.0685000  1.0296000];
+                case {'vonkries','vankries'}
+                    % Source: http://www.brucelindbloom.com/index.html?Eqn_ChromAdapt.html
+                    m =  [ 0.4002400  0.7076000 -0.0808100;...
+                        -0.2263000  1.1653200  0.0457000;...
+                        0.0000000  0.0000000  0.9182200];
+                otherwise
+                    error(['xBase.getMatrix: Matrix with Name: ' mName ' is not yet known'])
+            end
+        end
+
+
+%% ------------------------------------------------------------------------
+%% --- PATH SETUPS --------------------------------------------------------
+%% ------------------------------------------------------------------------
+        
+        %% Base Path
+        function path = getBasePath()
+            [~,hostName] = system('hostname');
+            switch lower(strtrim(hostName))
+                
+                case {'desktop-50mdv02'}
+                   path = 'D:/02_Studium/_bachelor_thesis/xLib' 
+                    
+                case {'jansmacbookpro.local', 'jans-mbp.fritz.box', 'jans-macbook-pro.local',...
+                        'ipad-von-christine.fritz.box'}
+                    path = '/Users/jan/WorkSpace/jLib';
+                case { 'jan-x99', 'nhf5pqc2' }
+                    path = 'S:/GoogleDrive/jLib';
+                    
+                otherwise
+                    error('Define Paths for your machine in jBase before using the jFramework')
+            end
+        end
+        
+        %% Test Image Path
+        function path = getImagePath()
+            [~,hostName] = system('hostname');
+            switch lower(strtrim(hostName))
+                case 'desktop-50mdv02'
+                    path = 'D:/02_Studium/_bachelor_thesis/xLib/TestImages'
+                    
+                case { 'jansmacbookpro.local', 'jansmacbookpro.fritz.box' }
+                    path = '/Volumes/Yosemite/Users/Jan/Google Drive/System/TestImages';
+                case { 'jan-x99', 'nhf5pqc2' }
+                    path = 'S:/GoogleDrive/System/TestImages';
+                case 'jans-macbook-pro.local'
+                    path = '/Users/Jan/Box Sync/TestImages';
+                otherwise
+                    error('Define Paths for your machine in jBase before using the jFramework')
+            end
+            
+        end
+        
+        
+        
+        
     end
 end
 
