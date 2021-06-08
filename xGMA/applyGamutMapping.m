@@ -19,7 +19,7 @@ function [ imgGamutMapped ] = applyGamutMapping(img, gmaName, mappingColorSpace,
 
     
     
-    %% TODO: fall unterscheidung xPixel, xImage?
+    %% TODO: fallunterscheidung xPixel, xImage?
 
     switch lower(gmaName)
         case 'sclip'

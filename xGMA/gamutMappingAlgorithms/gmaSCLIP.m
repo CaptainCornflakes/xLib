@@ -5,8 +5,8 @@ function [imgGamutMapped] = gmaSCLIP(img,mappingColorSpace, varargin)
     
     
     
-%     %% --------------------------------------------------------------------
-%     %% --- DEBUG START ----------------------------------------------------
+     %% --------------------------------------------------------------------
+     %% --- DEBUG START ----------------------------------------------------
 %     % original img, targetCS is set to srgb
 %     P3D65 = x3PrimaryCS('P3D65').setBlackLevel(0).setEncodingWhite(1,'Y').setAdaptationWhite(1,'Y');
 %     sRGB = x3PrimaryCS('sRGB').setBlackLevel(0).setEncodingWhite(1,'Y').setAdaptationWhite(1,'Y');
@@ -21,8 +21,8 @@ function [imgGamutMapped] = gmaSCLIP(img,mappingColorSpace, varargin)
 %     %img.getPixel()
 %     %img.show
 %    
-%     %% --- DEBUG END ------------------------------------------------------
-%     %% --------------------------------------------------------------------
+     %% --- DEBUG END ------------------------------------------------------
+     %% --------------------------------------------------------------------
 
 
 
@@ -66,14 +66,7 @@ function [imgGamutMapped] = gmaSCLIP(img,mappingColorSpace, varargin)
     ghmCSpx = xPixel(gamutHullTargetCS).setColorSpace(img.getColorSpace).toXYZ.setColorSpace(mappingColorSpace).fromXYZ;
     % create xTriangle obj
     ghmCS = gamutHullTargetCS.setPoint(ghmCSpx);
-    
 
-
-%             end
-%         end
-%     end
-   
-     
     %% find intersection of mapping lines and gamut hull of target CS in mapping CS
     [flag, intersectionPoints] = lineTriangleIntersect2(mappingLines, ghmCS, 'any2any');
     
@@ -86,22 +79,16 @@ function [imgGamutMapped] = gmaSCLIP(img,mappingColorSpace, varargin)
     imgGamutMapped = insert(img, intersectionP, idxList);
    
     %% visualization of mapping
-%     if isa(varargin{1}, 'char')
-%                     switch lower(varargin{1})
-    
     if nargin > 2
         for i = 1:size(varargin(1))
-%            if isa(varargin{i}, 'char')
                 switch lower(varargin{i,1}{1})
                     case {'visualize', 'vis'}
                         figure;
                         ghmCS.show(xPixel(gamutHullTargetCS))
                         mappingLines.show
+                        interP = xPoint([intersectMappingSpace.getPixel])
                         hold on
-                        P = intersectMappingSpace.getPixel
-                        for ii = 1:getNumElements(intersectMappingSpace)
-                            plot3(P(i,1), P(i,2), P(i,3), '*r')
-                        end
+                        show(interP, [0.4 1 0.2], 20)
                         
                         xlabel(mappingColorSpace.getAxisName(1));
                         ylabel(mappingColorSpace.getAxisName(2));

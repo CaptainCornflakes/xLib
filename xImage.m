@@ -34,11 +34,11 @@ classdef xImage < xPixel
                                     .setColorSpace(x3PrimaryCS('rec709'));
                                 
                                 
-%                         case {'isabella', 'isabella_logc',}
-%                             obj = xImage();
-%                             obj = obj.read(fullfile(xBase.getImagePath(), 'isabella_ARRI_LogC_v3_EI800.png')) ...
-%                                     .setColorSpace(x3PrimaryCS('alexawg'));
-                         
+                        case {'isabella', 'isabella_logc',}
+                            obj = xImage();
+                            obj = obj.read(fullfile(xBase.getImagePath(), 'isabella_LogC.dpx')) ...
+                                    .setColorSpace(x3PrimaryCS('alexawg'));
+                                
                         case('testcolors')
                             %obj = xImage();
                             obj.name = 'testcolors';
@@ -81,14 +81,26 @@ classdef xImage < xPixel
                 
                 % if object is xImage
                 elseif isa(varargin{1}, 'xImage')
-                    obj = varargin{1};
-                    
-                % ---TODO---    
-                % if object is xCLUT    
+                    obj = varargin{1};   
                 
                 % if object is xPoint
+                elseif isa(varargin{1},'xPoint3D')
+                    obj.data = varargin{1}.data;
+                    obj.name = varargin{1}.name;
+                    obj.path = varargin{1}.path;
+                    obj.history = varargin{1}.history;
                 
-                % if object is xLine
+                % if object is xLine  
+                elseif isa(varargin{1},'xLine3D')
+                    % Only vertices copied, idx lost!
+                    obj.data = varargin{1}.data;
+                    obj.name = varargin{1}.name;
+                    obj.path = varargin{1}.path;
+                    obj.history = varargin{1}.history;
+                    
+                % --- TODO: ----------------------------------------------- 
+                % --- if object is xCLUT ----------------------------------
+                % --------------------------------------------------------- 
                 
                 % if object is matlab.ui.figure
                 elseif isa(varargin{1},'matlab.ui.Figure')
@@ -206,6 +218,84 @@ classdef xImage < xPixel
         function img = vertcat(img,img2)
             img = img.setImage(cat(1, img.getImage, img2.getImage));
         end
+        
+        
+        function img = resize(img, height, width, mode)
+
+            if ~exist('Mode','var')
+                mode = 'bilinear';
+            end
+            
+            if isempty(height) && isempty(width)
+                error('At least one parameter "Width" or "Height" must be specified')     
+            elseif isempty(height)
+                height = round(img.getHeight*width/img.getWidth);
+            elseif isempty(width)
+                width = round(img.getWidth*height/img.getHeight);
+            else
+                % Everything is calculated
+            end
+            if ~isempty(img.alpha)
+                img.alpha = reshape(imresize(img.getAlpha,[height, width],mode),[height*width,1]);
+            end
+            img = img.setImage(imresize(img.getImage(),[height, width],mode))...
+                .setSize(height,width);
+        end
+        
+        %% center crop images
+        function img = crop(img, targetHeight, targetWidth)
+%             % Crop via logical index
+%             if islogical( targetHeight )
+%                 if size(targetHeight,1) == img.getHeight && size(targetHeight,1) == img.getHeight
+%                     if size( targetHeight, 3 ) == 1
+%                         im = img.getImage;
+%                         img = img.setImage( reshape( im( repmat( targetHeight, [1 1 3]) ) ) );
+%                     elseif size( targetHeight, 3 ) == 3
+%                         im = img.getImage;
+%                         img = img.setImage( im( targetHeight ) );
+%                     else
+%                         error('Cropping via logical index array: Wrong number of channels')
+%                     end
+%                 else
+%                     error('Cropping via logical index array: Size of the index does not match image size')
+%                 end
+            % Crop via height and width
+            if isscalar( targetHeight ) && isscalar( targetWidth )
+                rawImg = img.getImage;
+                rawImg = rawImg(floor(img.getHeight/2-targetHeight/2+1):1:floor(img.getHeight/2+targetHeight/2),...
+                    floor(img.getWidth/2-targetWidth/2+1):1:floor(img.getWidth/2+targetWidth/2),:);
+                img = img.setImage(rawImg);
+            % Crop via h and v index (ROI)
+            elseif isvector(targetHeight) && isvector(targetWidth)
+                im = img.getImage;
+                img = img.setImage( im( targetHeight, targetWidth, : ) );
+            else
+                error('Wrong input paramaters for jImage.crop')
+            end
+        end
+        
+        %% Center Paste Images on Background
+        function img = pad(img,targetHeight,targetWidth, bgColor)
+            if ~exist('bgColor','var')
+                bgColor = [0 0 0];
+            end
+            
+            rawImg = repmat(permute(bgColor,[1 3 2]),[targetHeight targetWidth 1]);
+            
+            rawImg(floor(targetHeight/2-img.getHeight/2+1):1:floor(targetHeight/2+img.getHeight/2),...
+                floor(targetWidth/2-img.getWidth/2+1):1:floor(targetWidth/2+img.getWidth/2),:) = ...
+                img.getImage;
+            
+            img = img.setImage(rawImg);
+        end
+        
+        %% center filter images
+        function img = filter(img,filter)
+            rawImg = img.getImage;
+            rawImg = imfilter(rawImg,filter);
+            img = img.setImage(rawImg);
+        end
+        
         
         %% display function
         

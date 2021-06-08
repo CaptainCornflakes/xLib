@@ -2,12 +2,21 @@
 %% --- xLib DOCUMENTATION AND USAGE EXAMPLES ------------------------------
 %% ------------------------------------------------------------------------
 
+% This file shows some basic principles you need to know when working with xLib.
+% However, what you can find here is not a complete overview, but 
+% should give an impression of how to work with xLib.
+
+% See the UML diagram in the documentation folder for an overview of all
+% xLib classes and their functions.
+% There are also external function files like for example 
+% the color space conversions in xLib/xColor/CSC
 
 
 %% --- WORKING WITH xOBJECTS ----------------------------------------------
 % how to create xObjects
 % how to store data
 % how to access data
+% show data
 
 %% creating xObjects and store data
 emptyImg = xImage()
@@ -35,7 +44,15 @@ idx = [false;true;false;false;true];
 % insert new pixel at idx 2
 newPixels = pixels.insert(newPix, idx);
 
+%% show function
+% different, dependnig on which xObject you want to show.
+% examples:
+point = xPoint([0.2 0.5 0.7])
+%   xPoint, color  , size 
+show(point, [1 0 0], 15)
 
+
+% check respective code for more info
 
 %% --- display the gamut of an CS in 3D -----------------------------------
 
