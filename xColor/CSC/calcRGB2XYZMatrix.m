@@ -13,7 +13,7 @@ end
 
 idx1 = @(x,a)x(a);
 
-%% Get Variables from jColorSpace:
+%% Get Variables from xColorSpace:
 xr = idx1(RGBColorSpace.getRedPrimary,1);
 yr = idx1(RGBColorSpace.getRedPrimary,2);
 xg = idx1(RGBColorSpace.getGreenPrimary,1);

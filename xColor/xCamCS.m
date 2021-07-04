@@ -1,5 +1,5 @@
 classdef xCamCS < xColorSpace
-    %xCamCS for representing co,lor appearance models
+    %xCamCS for representing color appearance models
     %   Detailed explanation goes here
     
     properties (SetAccess = protected)
@@ -21,7 +21,7 @@ classdef xCamCS < xColorSpace
                     case 'oklab'
                         obj.name = 'OKLAB';
                         obj.axisName = {'L', 'a', 'b'};
-                        obj.adaptWhite_Yxy = [];
+                        obj.adaptWhite_Yxy = [1 0.3127 0.3290];
                         obj.blackLevel = 0;
                         obj.adaptField = 0;
                         obj.veilingGlare = [];
@@ -152,6 +152,7 @@ classdef xCamCS < xColorSpace
             switch lower(obj.name)
                 
                 case 'oklab'
+                    % todo: check whitepoint and directly raise error if wrong set.
                     fun = @(x)OKLAB2XYZ(x)
                 
                 case 'ciecam02'
@@ -196,13 +197,7 @@ classdef xCamCS < xColorSpace
                         error('xCAMCS.toXYZ: hdrIPT is only defined for D65 Whitepoint')
                     end
                     fun = @(x)hdrIPT2XYZ(x,obj.getAdaptationWhite);
-                    
-                case 'hdriptc'
-                    if  (obj.getAdaptationWhite/obj.getAdaptationWhite('Y')) ~= xColorSpace.getWhitePoint('D65_31')
-                        error('xCAMCS.toXYZ: hdrIPTc is only defined for D65 Whitepoint')
-                    end
-                    fun = @(x)hdrIPTc2XYZ(x,obj.getAdaptationWhite,obj.param);
-                    
+                                     
                 case 'iptpq'
                     refWP = obj.getAdaptationWhite/obj.getAdaptationWhite('Y').*10000;
                     fun = @(x)IPTPQ2XYZ(x,refWP);
@@ -252,10 +247,7 @@ classdef xCamCS < xColorSpace
                         obj.adaptField,obj.adaptField,'dim');
                 case 'lab'
                     fun = @(x)XYZ2Lab(x,obj.getAdaptationWhite);
-                case 'lab2000hl'
-                    fun = @(x)XYZ2Lab2000HL(x,obj.getAdaptationWhite);
-                case 'lab2000hljan'
-                    fun = @(x)XYZ2Lab2000HLjan(x,obj.getAdaptationWhite);
+               
                 case 'lms'
                     refWP = obj.getAdaptationWhite/obj.getAdaptationWhite('Y').*10000;
                     if (refWP/10000) ~= xColorSpace.getWhitePoint('D65_31')
@@ -380,11 +372,6 @@ classdef xCamCS < xColorSpace
                         error('xCAMCS.fromXYZ: hdrIPT is only defined for D65 Whitepoint')
                     end
                     fun = @(x)XYZ2hdrIPT(x,obj.getAdaptationWhite);
-                case 'hdriptc'
-                    if (obj.getAdaptationWhite/obj.getAdaptationWhite('Y')) ~= xColorSpace.getWhitePoint('D65_31')
-                        error('xCAMCS.fromXYZ: hdrIPTc is only defined for D65 Whitepoint')
-                    end
-                    fun = @(x)XYZ2hdrIPTc(x,obj.getAdaptationWhite,obj.param);
                 case'iptpq'
                     refWP = obj.getAdaptationWhite/obj.getAdaptationWhite('Y').*10000;
                     fun = @(x)XYZ2IPTPQ(x,refWP);
@@ -397,12 +384,7 @@ classdef xCamCS < xColorSpace
                     if (refWP/10000) ~= xColorSpace.getWhitePoint('D65_31')
                         error('xCAMCS.fromXYZ: IPT is only defined for D65 Whitepoint')
                     end
-                case'iptpqcj'
-                    refWP = obj.getAdaptationWhite/obj.getAdaptationWhite('Y').*10000;
-                    fun = @(x)XYZ2IPTPQCj(x,refWP,obj.param);
-                    if (refWP/10000) ~= xColorSpace.getWhitePoint('D65_31')
-                        error('xCAMCS.fromXYZ: IPT is only defined for D65 Whitepoint')
-                    end
+
                 case'iptpqflex'
                     refWP = obj.getAdaptationWhite/obj.getAdaptationWhite('Y').*10000;
                     fun = @(x)XYZ2IPTPQflex(x,refWP,obj.param);
@@ -415,12 +397,7 @@ classdef xCamCS < xColorSpace
                     if (refWP/10000) ~= xColorSpace.getWhitePoint('D65_31')
                         error('xCAMCS.fromXYZ: IPT is only defined for D65 Whitepoint')
                     end
-                case'iptpqch'
-                    refWP = obj.getAdaptationWhite/obj.getAdaptationWhite('Y').*10000;
-                    fun = @(x)XYZ2IPTPQCH(x,refWP,obj.param(1:1:3),obj.param(4));
-                    if (refWP/10000) ~= xColorSpace.getWhitePoint('D65_31')
-                        error('xCAMCS.fromXYZ: IPT is only defined for D65 Whitepoint')
-                    end
+               
                 case 'yuv1976'
                     fun = @(x)XYZ2Yuv1976(x);
                 case 'yxy'

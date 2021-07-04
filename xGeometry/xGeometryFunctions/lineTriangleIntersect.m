@@ -1,8 +1,8 @@
-function [flag, intersection] = lineTriangleIntersect(Line, Triangle, varargin)
-% checks if a line and a triangle intersect
-% lineTriangleIntersect(Line, Triangle, Mode)
+function [intersectionIdx, intersectionPoints] = lineTriangleIntersect(Line, Triangle, varargin)
+%lineTriangleIntersect2 checks possible intersection of lines and triangles
+% inputs: lineTriangleIntersect(Line, Triangle, Mode)
 % first input is the line(s), second input is the triangle(s)
-% output is [flag, intersection]
+% output is [intersectionIdx, intersection] as raw data
 %
 %Modes:
 %   - 'FullLine' uses the infinite line and is not restricted to the given 
@@ -10,292 +10,231 @@ function [flag, intersection] = lineTriangleIntersect(Line, Triangle, varargin)
 %   - 'Any2Any' checks any line against any triangle and deliveress the
 %     nearest to the first point forming the line
 
+
+%% calculations based on:
+% http://paulbourke.net/geometry/pointlineplane/
+% http://paulbourke.net/geometry/pointlineplane/intersectionLinePlane.R
+
+
 %%
     % start function with both modes disabled
     FullLine = false;
     Any2Any = false;
-    
+
     %% case differentiation 'FullLine'/'Any2Any'/other
     % check all varargin and ignore Line and Triangle
     for i=1:1:nargin-2  % nargin-2 = number of args - Line and Triangle = varargin, steps of 2 because of setting 'FullLine'/'Any2Any' true (see function description)
         switch lower(varargin{i})
             case 'fullline'
                 FullLine = true;
+                disp('mode ''FullLine'' not yet implemented')
             case 'any2any'
                 Any2Any = true;   
             otherwise
                 error(['argument' varargin{i} 'not allowed'])
         end
     end
+
+    %% ------------------------------------------------------------------
+    %% --- DEBUG START --------------------------------------------------
     
-    
-%     %% ------------------------------------------------------------------------
-%     %% --------- DEBUG START --------------------------------------------------
-%     %% ------------------------------------------------------------------------
-% 
-%     %% single line and triangle
-%     % create test objects
-%     Line = xLine([0 0.2 0.2 1 0.8 0.9]);
-%     Triangle = xTriangle([ 0.9 0.5 0.2 0.2 0.5 0.4 0.5 0.5 0.9 ]);
-%     Any2Any = true;
-%     
-%     show(Line)
-%     show(Triangle)
-%     
-%     %% 2 lines and 2 triangles
+%     %% --- 2 lines and 2 triangles --------------------------------------
 % 
 %     Line = xLine([0.1 0 0.4 0.5 1 0.5; 0.1 0 0.1 0.1 1 0.1]);
-%     Triangle = xTriangle([0.9 0.5 0.2 0.2 0.7 0.4 0.2 0.5 0.9; 0.7 0.2 0.1 0.1 0.1 0 1 0.3 0.3]);
+%     Triangle = xTriangle([0.9 0.5 0.2 0.2 0.7 0.4 0.2 0.5 0.9; ...
+%                0.7 0.2 0.1 0.1 0.1 0 1 0.3 0.3]);
 %     Any2Any = true;
 %     
 %     show(Line)
 %     show(Triangle)
-%     %% ------------------------------------------------------------------------
-%     %% --------- DEBUG END ----------------------------------------------------
-%     %% ------------------------------------------------------------------------
-    
-    
-    %% additional vars
-    % get line, triangle and number of lines
-    rawLines = Line.getLine;
-    rawTris = Triangle.getTriangle;
-    numLines = size(rawLines(:,1:3),1);
-    
+%     
+%     %% --- gamut hull ---------------------------------------------------
+%     
+%     % set mode any2any
+%     Any2Any = true;
+%     
+%     % get sRGB gamut hull
+%     Triangle = x3PrimaryCS('sRGB').getGamutHull('triangle',3);
+% 
+%     % CS transformation to lab
+%     pix = xPixel( Triangle ).setColorSpace(x3PrimaryCS( 'sRGB' ) ... %set CS to sRGB
+%                        .setBlackLevel(0).setEncodingWhite(1,'Y'))... %set encoding white and blacklevel properly
+%                        .toXYZ.setColorSpace('oklab').fromXYZ; %set CS to OkLab 
+% 
+%     %store pixel data in gamut hull
+%     ghLab = Triangle.setPoint(pix);
+% 
+%     % plot
+%     hold off
+%     ghLab.show(xPixel(Triangle))
+% 
+%     % creating srcPoint OOG
+%     hold on
+%     srcPoint = xPoint([0.4 0.4 0.09]);
+%     srcPoint.show
+%     
+%     % creating mapping direction
+%     targetPoint = xPoint([0.6, 0, 0]);
+%     % creating line for mapping direction
+%     Line = xLine([srcPoint.data targetPoint.data]);
+%     Line.show
+%     
+%     %axis labeling
+%     xlabel L*
+%     ylabel a*
+%     zlabel b*
+%     grid on
+%     
+%     
+    %% --- DEBUG END ----------------------------------------------------
+    %% ------------------------------------------------------------------
 
-    %% CASE DIFFERENTIATIONS
+
+
+    %% variable declaration
+    % get line, triangle and number of lines and triangles
+    rawLines = Line.getLine;
+    numLines = getNumElements(Line);
     
-    %% input args: xLine, xTriangle
+    rawTris = Triangle.getTriangle;
+    numTris = getNumElements(Triangle);
+    
+    intersectionPoints = zeros(numLines,3);
+    intersectionIdx = logical(zeros(numLines,1)); %#ok<LOGL>
+    
+    %% INPUT ARGS = xLine and xTriangle
     if isa(Line, 'xLine') && isa(Triangle, 'xTriangle')
         
-        
-        %% less than 15000000 calculations 
-        % (restriction to prevent RAM from being filled completely on 16GB machine)
-        if (Triangle.getNumElements*Line.getNumElements < 15000000) || ~Any2Any
-            
-            %transpose all points to vertical representation.
-            %repmat to get every combination of lines and triangles.
-                  
-            % BASIC STRUCTURE:
-                % L1 and L2:
-                    % dim1 = X,Y,Z coordinates for one point
-                    % dim2 = number of collums is number of points
-                    % dim3 = duplicate coordinates, number of dim3's is the number of calculations (num of triangles)
+        if Any2Any == true
+            for i = 1:numLines % 1. check every line
                 
-                % T1, T2, T3:
-                    % dim1 = X,Y,Z coordinates for one point
-                    % dim2 = duplicate coordinates, number of dim2's is the number of calculations (num of lines)
-                    % dim3 = each dim3 holds a different triangle
+                % index of current line
+                %iL = i;
+                
+                % get start- and endpoints of current line (transposed)
+                L1 = rawLines(i,1:3)';
+                L2 = rawLines(i,4:6)';
+                
+                % get directional vector from L1 to L2
+                vL1L2 = L2-L1;
+                
+                for ii = 1:numTris % 2. with every triangle
                     
-                % e.g. if there are 2 lines and 3 triangles,
-                    %      there will be 3x dim3 (one for each calculation)
-                    %      for L1 and L2 and 2x dim2 for T1,T2,T3
-            
-            if Any2Any == true
-                % starting points line(s)
-                L1 = repmat(permute(rawLines(:,1:3),[2 1 3]),[1 1 Triangle.getNumElements]);
-                % endpoints line(s)
-                L2 = repmat(permute(rawLines(:,4:6),[2 1 3]),[1 1 Triangle.getNumElements]);
-                % points triangle(s)
-                T1 = repmat(permute(rawTris(:,1:3),[2 3 1]),[1 Line.getNumElements 1]);
-                T2 = repmat(permute(rawTris(:,4:6),[2 3 1]),[1 Line.getNumElements 1]);
-                T3 = repmat(permute(rawTris(:,7:9),[2 3 1]),[1 Line.getNumElements 1]);
-                
-            else
-                % if number of triangles = multiple of the number of lines
-                if mod(Triangle.getNumElements,Line.getNumElements) == 0
-                    % starting points line(s)
-                    L1 = repmat(permute(rawLines(:,1:3),[2 1 3]),...
-                        [1 1 Triangle.getNumElements/Line.getNumElements]);
-                    % endpoints line(s)
-                    L2 = repmat(permute(rawLines(:,4:6),[2 1 3]),...
-                        [1 1 Triangle.getNumElements/Line.getNumElements]);
-                    % points triangle(s)
-                    T1 = permute(reshape(rawTris(:,1:3)',3,Line.getNumElements,[]),[1 2 3]);
-                    T2 = permute(reshape(rawTris(:,4:6)',3,Line.getNumElements,[]),[1 2 3]);
-                    T3 = permute(reshape(rawTris(:,7:9)',3,Line.getNumElements,[]),[1 2 3]);
-                else
-                    error('when using lineTriangleIntersect without option ''Any2Any'' the number of triangles must be a multiple of the number of lines!')
+                    % get points of current triangle (transposed)
+                    T1 = rawTris(ii, 1:3)'; % 1. point triangle
+                    T2 = rawTris(ii, 4:6)'; % 2. point triangle
+                    T3 = rawTris(ii, 7:9)'; % 3. point triangle
+                    
+                    % defining both vectors of the triangle from point T1
+                    vT1T2 = T2-T1; % vector from T1 to T2
+                    vT1T3 = T3-T1; % vector from T1 to T3
+                    
+                    % vector from L1 to T3
+                    vL1T3 = T3-L1;
+
+
+                    %% ------- CALC POSSIBLE INTERSECTION -----------------
+                    
+                    % crossproduct of vectors == triangle's normal 
+                    % (from global origin, not triangle's origin)
+                    crossprodT = cross(vT1T3, vT1T2);
+                    % plot3(0+T1(1),-0.41+T1(2),0+T1(3), 'or') % plot xprodT with local origin of T1
+                    
+                      
+                    % calculating scalar-/dotproduct of the triangles
+                        %vectors are orthogonal if dotproduct == 0
+                    % normal and the vector between the triangle and the line 
+                    n = dot(crossprodT, vL1T3); % between the triangles normal and the vector between T3 and L1 
+                    
+                    % calculating scalar-/dotproduct of the triangles
+                    % normal and the vector of the line 
+                    d = dot(crossprodT, vL1L2); % between the triangles normal and the vector of the line
+                    
+                    % intersection with infinite plane happens if 0 <= n/d <= 1
+                    % u defines, how far from L1 lies the intersectionpoint P
+                    % (how many units from L1 in the direction vL1L2)
+                    % where u=0 is L1 and u=1 is L2
+                    u = n/d;
+                    
+                    if (u >= 0) && (u <= 1)
+                        
+                        % point of possible intersection
+                        P = L1 + u*vL1L2;
+                        
+          
+                        %% calculate if intersection point lies within triangle
+                        % given that the point P lies on the surface of a 
+                        % triangle (T1,T2,T3), the surface area of the
+                        % plane A (T1, T2, T3, P) should be smaller than the 
+                        % surface area of the original triangle.
+                        % therefore the calculations below are made to
+                        % check, if P lies within the triangle.
+                        % basic idea from
+                        % https://prlbr.de/2014/liegt-der-punkt-im-dreieck{
+                        
+                        % the surface area of a triangle is calculated as follows: 
+                        % surfTriangle = 0.5 * |(vT1T2 x vT1T3)|
+                        % whereby the magnitude of a vector is calculated as sqrt(x^2+y^2+z^2)
+                        surfTriangle = 0.5 * sqrt((crossprodT(1)^2 + crossprodT(2)^2 + crossprodT(3)^2));
+                        
+                        % creating vectors from P to all vectors of the
+                        % triangle
+                        vPT1 = T1-P; % vector from P to T1
+                        vPT2 = T2-P; % vetor from P to T2
+                        vPT3 = T3-P; % vector from P to T3
+                        
+                        % since there are three possibillities to build a triangle through P with T1,T2,T3, 
+                        % all possible combinations of connecting the
+                        % points via 2 triangles to a plane must be
+                        % considered.
+                        
+                        % crossproducts of all possible triangles using P
+                        % and 2 points of the original triangle
+                        crossTemp1 = cross(vPT1, vPT2);
+                        crossTemp2 = cross(vPT1, vPT3);
+                        crossTemp3 = cross(vPT2, vPT3);
+
+                        % calc surface areas of possible triangles trough P
+                        surfTriangleTemp1 = 0.5 * sqrt((crossTemp1(1)^2 + crossTemp1(2)^2 + crossTemp1(3)^2)); % surface area temp triangle 1
+                        surfTriangleTemp2 = 0.5 * sqrt((crossTemp2(1)^2 + crossTemp2(2)^2 + crossTemp2(3)^2)); % surface area temp triangle 2
+                        surfTriangleTemp3 = 0.5 * sqrt((crossTemp3(1)^2 + crossTemp3(2)^2 + crossTemp3(3)^2)); % surface area temp triangle 3
+                        
+                        % calculating the surface area (plane) of T1,T2,T3,P as two
+                        % triangles for each combination
+                        surfPlane1 = surfTriangleTemp1 + surfTriangleTemp2; % calc surface of plane 1
+                        surfPlane2 = surfTriangleTemp1 + surfTriangleTemp3; % calc surface of plane 2
+                        surfPlane3 = surfTriangleTemp2 + surfTriangleTemp3; % calc surface of plane 3
+                        
+                        % max of all possible planes to avoid wrong combination
+                        surfPlane = max([surfPlane1; surfPlane2; surfPlane3]);
+                        
+                        % check if surface of triangle is greater than 
+                        if surfTriangle >= surfPlane
+                           
+                            % intersection true
+                            intersectionIdx(i) = true
+                            intersectionPoints(i,:) = P';
+                            
+
+                            % display intersection points and T1,T2,T3 of
+                            % respective triangle
+                            disp(['Line ', num2str(i), ' intersects with Triangle ', num2str(ii), ' at Point: ' ]);
+                            disp(num2str(P));
+%                            hold on
+%                            plot3(P(1), P(2), P(3), '*r')
+%                            plot3(T1(1), T1(2), T1(3), 'om', 'Markersize', 12);
+%                            plot3(T2(1), T2(2), T2(3), 'om', 'Markersize', 12);
+%                            plot3(T3(1), T3(2), T3(3), 'om', 'Markersize', 12);
+                            
+                            % intersection points
+                            %store as raw point data
+                        end
+                    end
                 end
             end
-            
-            % triangles per line
-            TsPerLine = size(L1,3);
-            
-            % def intersection matrix
-            % dim1 = X,Y,Z coordinates
-            % dim2 = one dim for each triangle
-            % dim3 = one dim for each line
-            intersection = NaN(3,numLines,TsPerLine);
-            
-            %% vectorization
-            epsilon = 10^-5;
-            % Vektoren die Linie und Ebene aufspannen:
-            o = L1;     % local origin
-            d = L2-L1;  % directional vector from L1 to L2 of the lines
-            e1 = T2-T1; % directional vector from T1 to T2 of the triangles
-            e2 = T3-T1; % directional vector from T1 to T3 of the triangles
-            p  = cross(d,e2,1); % cross product p = the normal between d and e2 (line and e2)
-            a = dot(e1,p,1); % dot product between normal and e1 is zero if Dotprodukt zwischen Normale und e1 ist 0 wenn beide unabhängig, d.h. Linie und Dreieck in einer Ebene  oder exakt parallel          
+        end
         
-            % index == 1 if dot product < epsilon 
-            % line lies on the same plane as triangle
-            
-            index = abs(a) > epsilon;
-            
-            %% calculations
-            f = zeros(1, length(L1), TsPerLine);
-            f(index) = 1./a(index);
-            
-            %%
-            s = zeros(3, length(L1), TsPerLine);
-            s(:,index) = o(:,index)-T1(:,index);
-            
-            
-            %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            %% %%%%%%%% AB HIER NOCHMAL ANSCHAUEN FUER VERSTÄNDNIS %%%%%%%%
-            %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            
-            
-            %%
-            u = zeros(1,numLines,TsPerLine);
-            if TsPerLine == 1
-                u(index) = f(index).*dot(s(:,index),p(:,index),1);
-            else
-                u(index) = f(permute(index,[1 3 2])).*dot(s(:,index),p(:,index),1);
-            end
-            
-            %% Index aktualisieren für ausserhalb des Dreiecks in Bezug auf u
-            index = index & (u >= 0 & u <= 1);
-            %%
-            q = zeros(3,numLines,TsPerLine);
-            q(:,index) = cross(s(:,index),e1(:,index),1);
-            %%
-            v = zeros(1,numLines,TsPerLine);
-            if TsPerLine == 1
-                v(index) = f(index).*(dot(d(:,index),q(:,index),1));
-            else
-                v(index) = f(permute(index,[1 3 2])).*(dot(d(:,index),q(:,index),1));
-            end
-            
-            %% Index aktualisieren für ausserhalb des Dreiecks in Bezug auf v und u+v
-            index = index & (v >= 0 & u+v <= 1);
-            %%
-            t = zeros(1,numLines,TsPerLine);
-            if TsPerLine == 1
-                t(index) = f(index).*(dot(e2(:,index),q(:,index),1));
-            else
-                t(index) = f(permute(index,[1 3 2])).*(dot(e2(:,index),q(:,index),1));
-            end
-            
-            %% Beschränkung auf die Linie zwischen den Punkten:
-            if not(FullLine)
-                index = index & (t >= 0 & t <= 1);
-            end
-
-            %%
-            if TsPerLine == 1
-                intersection(:,index) = o(:,index) + repmat(t(index),3,1).*d(:,index);
-            else
-                intersection(:,index) = o(:,index) + repmat(t(index)',3,1).*d(:,index);
-            end
-            %%
-            flag = sum(index,3);
-
-            % Wenn mehrere Dreiecke geschnitten werden langameren Code ausführen:
-            if max(flag > 1)
-                [~, IDX] = max(sqrt(sum((o - intersection).^2,1)),[],3);
-                intersection = xPoint(intersection(:,(IDX-1).*numLines+(1:1:numLines))');
-            else
-                %% Hier muss noch schnellerer Code rein...
-                [~, IDX] = max(sqrt(sum((o - intersection).^2,1)),[],3);
-                intersection = xPoint(intersection(:,(IDX-1).*numLines+(1:1:numLines))');
-            end
-
-            % size(intersection)
-            % intersection = xPoint(intersection');
-            
-        else
-            %% more than 15000000 calculations 
-            disp('Using TriangelLineIntersect to detect more than 10 Million intersections may be very slow!')
-
-%                     if Any2Any == false
-%                         error('More than 10^7 intersections are currently only supported in Any2Any Mode')
-%                     end
-
-            flag = false(numLines,1);
-            dist = Inf(numLines,1);
-            intersection = NaN(numLines,3);
-            %%
-            for i = 1:1:length(Triangle.P1)
-                %%
-                disp(['Checking against Triangle Nr.:' num2str(i)])
-                TriangleRep = xTriangle(repmat(rawTris(i,1:3),[numLines 1]),...
-                    repmat(rawTris(i,4:6),[numLines 1]),...
-                    repmat(rawTris(i,7:9),[numLines 1]));
-
-                epsilon = 10^-5;
-                % Vektoren die Linie und Ebene aufspannen:
-                o = Line.P1; % Origin
-                d = Line.P2-Line.P1; % Vektor der Linie
-                e1 = TriangleRep.P2-TriangleRep.P1; % Vektor 1 des Dreiecks
-                e2 = TriangleRep.P3-TriangleRep.P1; % Vektor 2 des Dreiecks
-                p  = cross(d,e2,2); % Kreuzprodukt ergibt Normale zwischen d und e2 (Gerade und e2)
-                a = dot(e1,p,2); % Dotprodukt zwischen Normale und e1 ist 0 wenn beide unabhängig, d.h. Linie und Dreieck in einer Ebene
-
-
-                % Wenn Kreuzprodukt < epsilon liegt die Gerade in einer Ebene mit dem Dreieck
-                index = abs(a) > epsilon;
-
-                %% Calculations:
-                f = zeros(numLines,1);
-                f(index) = 1./a(index);
-
-                s = zeros(numLines,3);
-                s(index,:) =  o(index,:)-TriangleRep.P1(index,:);
-
-                u = zeros(numLines,1);
-                u(index) = f(index).*dot(s(index,:),p(index,:),2);
-
-                %% Index aktualisieren für ausserhalb des Dreiecks in Bezug auf u
-                index = index & (u >= 0 & u <= 1);
-                %%
-                q = zeros(numLines,3);
-                q(index,:) = cross(s(index,:),e1(index,:),2);
-                %%
-                v = zeros(numLines,1);
-                v(index) = f(index).*(dot(d(index,:),q(index,:),2));
-
-                %% Index aktualisieren für ausserhalb des Dreiecks in Bezug auf v und u+v
-                index = index & (v >= 0 & u+v <= 1);
-                %%
-                t = zeros(numLines,1);
-                t(index) = f(index).*(dot(e2(index,:),q(index,:),2));
-
-                %% Beschränkung auf die Linie zwischen den Punkten:
-                if not(FullLine)
-                    index = index & (t >= 0 & t <= 1);
-                end
-
-                %% flag hier aktualisieren damit doppele Schnitte als Werte größer 1 dedektiert werden.
-                flag = flag+index;
-
-                %% Punkte aus dem Index werfen für die schon eine dem ersten Punkt der Linie nähere Schnittstelle gefunden wurde:
-                index(index) = index(index) & ( ((t(index).*d(index,1)).^2+...
-                    (t(index).*d(index,2)).^2+...
-                    (t(index).*d(index,3)).^2) < dist(index) );
-                %%
-                intersection(index,:) = o(index,:) + repmat(t(index),1,3).*d(index,:);
-                %%
-                dist(index) = t(index).*(d(index,1).^2+d(index,2).^2+d(index,3).^2);
-                flag = flag+index;
-                % clear u q t v index s p f
-            end
-            
-            intersection = xPoint(intersection);
-        end   
-                    
-    else
-        error('TriangelLineIntersect expects first a Line and the a Triangle as input parameters');
-
     end
+    
 end
+

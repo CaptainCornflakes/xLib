@@ -1,8 +1,4 @@
 %% creating sRGB in IPT
-%funktioniert noch
-%gh = x3PrimaryCS('sRGB').getGamutHull('triangle',12);
-
-%funktioniert nicht mehr
 gh = x3PrimaryCS('sRGB').getGamutHull('triangle',20);
 
 % CS transformation
@@ -39,7 +35,7 @@ mappingLines.show
 
 
 %% calculate intersection
-[flag2, intersect2] = lineTriangleIntersect2(mappingLines, ghLab, 'any2any');
+[flag2, intersect2] = lineTriangleIntersect(mappingLines, ghLab, 'any2any');
 %[flag, intersect] = lineTriangleIntersect(mappingLines, ghLab, 'any2any');
 
 %%

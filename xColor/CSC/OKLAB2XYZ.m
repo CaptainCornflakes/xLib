@@ -9,7 +9,7 @@ function img = OKLAB2XYZ(img)
 % calculations based on:
 % https://bottosson.github.io/posts/oklab/
 
-% -------------------------------------------------------------------------
+% %-------------------------------------------------------------------------
 % %% ---- DEBUG START -----------------------------------------------------
 % 
 %    img = xPixel([1 0 0; ...
@@ -18,51 +18,49 @@ function img = OKLAB2XYZ(img)
 %                  0.153 -1.415 -0.449]);
 % 
 %    img = img.setColorSpace('oklab');
-
+% 
 % %    after calculating, imgXYZ should be:
 % %        0.950   1.000   1.089
 % %        1.000   0.000   0.000
 % %        0.000   1.000   0.000
 % %        0.000   0.000   1.000
-
+% 
 % %% ---- DEBUG END -------------------------------------------------------
-% -------------------------------------------------------------------------
+% %-------------------------------------------------------------------------
 
 
 %% --- INITS --------------------------------------------------------------
 warning('XYZ2Oklab only works for D65 whitepoint')
 
-%img = raw img data, meta = xobj
-[imgOklab,meta] = img2raw(img);
+[img,meta] = img2raw(img); %img2raw: img is pixel data, meta stores xObj info
     
 
-    
 %% --- DEFINING MATRICES --------------------------------------------------
 % https://bottosson.github.io/posts/oklab/
 
-% defining inverse matrix M1 for converting from cone responses to XYZ
+% inverse matrix M1 for converting cone responses to XYZ
 invM1 = [0.8189330101, 0.3618667424, -0.1288597137; ...
          0.0329845436, 0.9293118715, 0.0361456387; ...
          0.0482003018, 0.2643662691, 0.6338517070] ...
          ^(-1);
 
-
-% defining inverse matrix M2 to transform from Lab coordinates to nonlinear cone response   
+% inverse matrix M2 to transform Lab coordinates to nonlinear cone response   
 invM2 = [0.2104542553, 0.7936177850, -0.0040720468; ...
          1.9779984951, -2.4285922050, 0.4505937099; ...
          0.0259040371, 0.7827717662, -0.8086757660] ...
          ^(-1);
-         
+ 
+     
 %% --- COMPUTATION --------------------------------------------------------
 % 1. transform from Lab to nonlinear cone response
-lmsNonlin = (invM2 * imgOklab')';
+lmsNonlin = (invM2 * img')'; % transpose for correct dims while calculating
 
 % 2. linearize
-% lms = lmsNonlin.^3;
 lms = lmsNonlin.^3;
 
 % 3. transform from cone response to XYZ
-imgXYZ = (invM1 * lms')';
+imgXYZ = (invM1 * lms')'; % transpose back to correct dims for xLib
+
 
 %% --- PREPARE OUTPUT -----------------------------------------------------
 img = raw2img(imgXYZ, meta);

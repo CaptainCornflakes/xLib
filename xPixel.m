@@ -343,8 +343,8 @@ classdef xPixel < xBase
                 case 'plain'
                     Img.showImage(varargin{:});
                     
-                case {'xychart','xy'}
-                    xyChart2(Img,varargin{:});
+%                 case {'xychart','xy'}
+%                     xyChart2(Img,varargin{:});
                 case {'uvchart','uv'}
                     uvChart(Img,varargin{:});
                 case {'gamut','3d'}

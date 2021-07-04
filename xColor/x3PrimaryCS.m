@@ -27,8 +27,7 @@ classdef x3PrimaryCS < xColorSpace
                 obj.axisName = {'R','G','B'};
                 obj.decorrelateAxisName = {'Y', 'Cb', 'Cr'};
                 switch lower(colorSpaceName)
-                    
-                    %% DISPLAYS
+                        
                     case {'alexawg', 'awg'}
                         obj.name = 'ALEXAWG';
                         obj.redPrim_xy = [0.6840 0.3130];
@@ -96,6 +95,22 @@ classdef x3PrimaryCS < xColorSpace
                         obj.adaptField = [];
                         obj.veilingGlare = [];
                         
+                    case 'p3d65pq'
+                        % Encoding Parameters (Primaries from SMPTE RP-431-2-2011, White from ISO 22028-1:2004)
+                        obj.name = 'P3D65PQ';
+                        obj.redPrim_xy = [0.680 0.320];
+                        obj.greenPrim_xy = [0.265 0.690];
+                        obj.bluePrim_xy = [0.150 0.060];
+                        obj.encWhite_Yxy = [10000 0.3127 0.3290];
+                        obj.LPCF = @(x)L2PQ(x.*10000);
+                        obj.PLCF = @(x)PQ2L(x)./10000;
+
+                        % Adaption Parameters (Black level assumed 0, adaptField and veilingglare not defined)
+                        obj.adaptWhite_Yxy = obj.encWhite_Yxy;
+                        obj.blackLevel = 0.005;
+                        obj.adaptField = [];
+                        obj.veilingGlare = [];
+                        
                     case 'rec2020'
                         % Encoding Parameters from Recommendation ITU-R BT.2020 (08/2012)
                         % Parameter values for ultra-high definition television systems for
@@ -120,6 +135,19 @@ classdef x3PrimaryCS < xColorSpace
                         obj.blackLevel = 0.1;
                         obj.adaptField = [];
                         obj.veilingGlare = [];
+                        
+                    case 'rec2020pq'
+                        % Encoding Parameters from Recommendation ITU-R BT.2020 (08/2012)
+                        obj.name = 'Rec2020PQ';
+                        obj.redPrim_xy = [0.708 0.292];   % 630 nm
+                        obj.greenPrim_xy = [0.170 0.797]; % 532 nm
+                        obj.bluePrim_xy = [0.131 0.046];  % 467 nm Compromise what’s currently possible with LED backlit LCD and AMOLED and with Laser displays (http://www.tftcentral.co.uk/articles/content/pointers_gamut.htm#_Toc379132050)
+                        obj.encWhite_Yxy = [10000 0.3127 0.3290];
+                        obj.LPCF = @(x)L2PQ(x.*10000);
+                        obj.PLCF = @(x)PQ2L(x)./10000;
+                        obj.deCorrelationMatrix = [0.2627  0.6780   0.0593;...
+                                                [ -0.2627 -0.6780 1-0.0593]./1.8814;...
+                                                [1-0.2627 -0.6780  -0.0593]./1.4746];
                         
                     case 'rec709'
                         % Encoding Parameters from RECOMMENDATION ITU-R BT.709-5 -  Parameter values
@@ -146,6 +174,22 @@ classdef x3PrimaryCS < xColorSpace
                         obj.adaptField = obj.adaptWhite_Yxy(1)/100*2; % 2% from "ACES ODT Surround Video Viewing Environment Adjustment Experiment - Draft 6"
                         obj.veilingGlare = [];
                         
+                    case 'rec709pq'
+                        % Encoding Parameters (Primaries from ITU-R BT.709-5, White from ISO 22028-1:2004)
+                        obj.name = 'Rec709PQ';
+                        obj.redPrim_xy = [0.6400 0.3300];
+                        obj.greenPrim_xy = [0.3000 0.6000];
+                        obj.bluePrim_xy = [0.1500 0.0600];
+                        obj.encWhite_Yxy = [10000 0.3127 0.3290];
+                        obj.LPCF = @(x)L2PQ(x.*10000);
+                        obj.PLCF = @(x)PQ2L(x)./10000;
+
+                        % Adaption Parameters (Black level assumed 0, adaptField and veilingglare not defined)
+                        obj.adaptWhite_Yxy = obj.encWhite_Yxy;
+                        obj.blackLevel = 0.005;
+                        obj.adaptField = obj.adaptWhite_Yxy(1)/100*2; % 2% from "ACES ODT Surround Video Viewing Environment Adjustment Experiment - Draft 6"
+                        obj.veilingGlare = [];
+                        
                     case 'srgb'
                         % Encoding Parameters from IEC 61966-2-1 and ISO 22028-1:2004
                         obj.name = 'sRGB';
@@ -163,6 +207,40 @@ classdef x3PrimaryCS < xColorSpace
                         obj.blackLevel = 1;
                         obj.adaptField = 20;
                         obj.veilingGlare = 5.5;
+                    
+                    case {'aces'}
+                        % ACES AP0
+                        obj.name = 'ACES';
+                        obj.redPrim_xy = [0.73470 0.26530];
+                        obj.greenPrim_xy = [0.00000 1.00000];
+                        obj.bluePrim_xy = [0.00010 -0.07700];
+                        obj.encWhite_Yxy = [1 0.32168 0.33767];
+
+                        obj.LPCF = @(x)x;
+                        obj.PLCF = @(x)x;
+
+                        % Adaption Parameters assumed without reference
+                        obj.adaptWhite_Yxy = obj.encWhite_Yxy;
+                        obj.blackLevel = 0.0;
+                        obj.adaptField = [];
+                        obj.veilingGlare = [];
+                        
+                    case {'acescg'}
+                        % ACES AP1
+                        obj.name = 'ACEScg';
+                        obj.redPrim_xy = [0.713 0.293];
+                        obj.greenPrim_xy = [0.165 0.830];
+                        obj.bluePrim_xy = [0.128 0.044];
+                        obj.encWhite_Yxy = [1 0.32168 0.33767];
+
+                        obj.LPCF = @(x)x;
+                        obj.PLCF = @(x)x;
+
+                        % Adaption Parameters assumed without reference
+                        obj.adaptWhite_Yxy = obj.encWhite_Yxy;
+                        obj.blackLevel = 0.0;
+                        obj.adaptField = [];
+                        obj.veilingGlare = [];    
                         
                     case 'xyz'
                         % Encoding Parameters
@@ -183,7 +261,7 @@ classdef x3PrimaryCS < xColorSpace
                         
                     otherwise
                         obj.name = false;
-                    end
+                end
             else
                 error('x3PrimaryCS.Constructor only accepts colorspace names or xColorSpace objects')
             end
@@ -418,7 +496,10 @@ classdef x3PrimaryCS < xColorSpace
             %
             % ToDo: Compare with Computational Color Technology from Henry R. Kang
             
-            %% Get Variables from JColorSpace:
+            %% DEBUG ---
+            %obj = x3PrimaryCS('rec709').setEncodingWhite(1,'Y').setBlackLevel(0)
+            %------------
+            %% Get Variables from xColorSpace:
             xr = obj.redPrim_xy(1);
             yr = obj.redPrim_xy(2);
             
@@ -432,27 +513,43 @@ classdef x3PrimaryCS < xColorSpace
             xw = obj.encWhite_Yxy(2);
             yw = obj.encWhite_Yxy(3);
             
+            
+            
             %% Calculate X,Y,Z of Primaries assuming Luminance of X,Y,Z = 1 for R,G,B respectively.
             Xr = 1;
             Yr = yr / xr;
-            Zr = (1.0 - xr - yr) / xr;
+            Zr = (1.0 - xr - yr) / xr; % zr/yr
             
             Xg = xg / yg;
-            Yg = 1;
-            Zg = (1.0 - xg - yg) / yg;
+            Yg = 1; 
+            Zg = (1.0 - xg - yg) / yg; %zg/yg
             
             zb = 1-xb-yb;
             Xb = xb / zb;
             Yb = yb / zb;
             Zb = 1;
             
+%             %same conventions as on lindblooms website
+%             Xr = xr/yr;
+%             Yr = 1;
+%             Zr = (1.0 - xr - yr) / yr; % zr/yr
+%             
+%             Xg = xg / yg;
+%             Yg = 1; 
+%             Zg = (1.0 - xg - yg) / yg; %zg/yg
+%             
+%             Xb = xb / yb;
+%             Yb = 1;
+%             Zb = (1.0-xb-yb)/yb;
+            
+            
             %% Calculate X,Y,Z of Whitepoint
-            Xw = xw*Yw / yw;
+            Xw = xw*Yw / yw; % Yw * xw /yw
             % Yw is already there
-            Zw = (1.0 - xw - yw)*Yw / yw;
+            Zw = (1.0 - xw - yw)*Yw / yw; % Yw * zw /yw
             
             %% Find Scaling values to correct X,Y,Z = 1 for R,G,B respectively assumption:
-            % Find Rs,Sg,Sb to solve:
+            % Find Sr,Sg,Sb to solve:
             % (Xr Xg Xb) (Sr) (Xw)
             % (Yr Yg Yb)*(Sg)=(Yw)
             % (Zr Zg Zb) (Sb) (Zw)
@@ -463,16 +560,6 @@ classdef x3PrimaryCS < xColorSpace
             M = [S';S';S'].*[Xr Xg Xb;Yr Yg Yb;Zr Zg Zb]/Yw;
             % disp(M)
         end
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
         
         %% Create Gamut Boundary descriptor
@@ -674,7 +761,7 @@ classdef x3PrimaryCS < xColorSpace
                         geom{i} = geom{i}.linearize;
                     end
                 elseif strcmpi(type,'cusp')
-                    geom = geom.setPoint(jPixel(geom.getPoint).setColorSpace(obj).linearize.getPixel);
+                    geom = geom.setPoint(xPixel(geom.getPoint).setColorSpace(obj).linearize.getPixel);
                     %disp('Linearizeing CUSP')
                 else
                     geom = geom.linearize;

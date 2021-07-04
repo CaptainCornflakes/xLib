@@ -124,8 +124,8 @@ classdef xColorSpace
                     obj = x3PrimaryCS(colorSpace);
                 elseif ~islogical(xCamCS(colorSpace).getName)
                     obj = xCamCS(colorSpace);
-                elseif ~islogical(xMeasuredCS(colorSpace).getName)
-                    obj = xMeasuredCS(colorSpace);
+%                 elseif ~islogical(xMeasuredCS(colorSpace).getName)
+%                     obj = xMeasuredCS(colorSpace);
                 else
                     error('xPixel.setColorSpace: input must be valid char colorspace name')
                 end
