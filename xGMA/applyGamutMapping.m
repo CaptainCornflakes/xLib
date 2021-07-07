@@ -6,7 +6,6 @@ function [ imgGamutMapped ] = applyGamutMapping(img, gmaName, mappingColorSpace,
 %   valid gmaNames are:
 %       - 'SCLIP'
 
-
 % warning
 if ~img.isLinear
     warning(['images expected to be encoded in linear domain before gamut mapping. ' ...
@@ -16,12 +15,13 @@ end
 % make sure mapping color space is xColorSpace and set correct encoding white
 mappingColorSpace = xCamCS(mappingColorSpace).setAdaptationWhite(img.getColorSpace.getAdaptationWhite);
 
-%% TODO: fallunterscheidung xPixel, xImage?
-
+%% TODO:
+    % - fallunterscheidung xPixel, xImage?
+    % - variable precision of gamut hull as varargin
 % select GMA
 switch lower(gmaName)
     case 'sclip'
-        [imgGamutMapped]= gmaSCLIP(img, mappingColorSpace, varargin);
+        [imgGamutMapped]= gmaSCLIP(img, mappingColorSpace, varargin{:});
     
     otherwise
         error(['ERROR! ' gmaName ' is not implemented yet'])

@@ -212,14 +212,14 @@ function [intersectionIdx, intersectionPoints] = lineTriangleIntersect(Line, Tri
                         if surfTriangle >= surfPlane
                            
                             % intersection true
-                            intersectionIdx(i) = true
+                            intersectionIdx(i) = true;
                             intersectionPoints(i,:) = P';
                             
 
                             % display intersection points and T1,T2,T3 of
                             % respective triangle
-                            disp(['Line ', num2str(i), ' intersects with Triangle ', num2str(ii), ' at Point: ' ]);
-                            disp(num2str(P));
+%                            disp(['Line ', num2str(i), ' intersects with Triangle ', num2str(ii), ' at Point: ' ]);
+%                            disp(num2str(P));
 %                            hold on
 %                            plot3(P(1), P(2), P(3), '*r')
 %                            plot3(T1(1), T1(2), T1(3), 'om', 'Markersize', 12);

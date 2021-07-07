@@ -153,7 +153,7 @@ classdef xCamCS < xColorSpace
                 
                 case 'oklab'
                     % todo: check whitepoint and directly raise error if wrong set.
-                    fun = @(x)OKLAB2XYZ(x)
+                    fun = @(x)OKLAB2XYZ(x);
                 
                 case 'ciecam02'
                     fun = @(x)CIECAM022XYZ(x,obj.getAdaptationWhite,...

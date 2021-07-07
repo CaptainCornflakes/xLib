@@ -1,3 +1,4 @@
+
 classdef xPixel < xBase
     %xPixel Class for representing pixels
     %   pixel data is stored in the following form:
@@ -54,7 +55,7 @@ classdef xPixel < xBase
                 obj.data = idx2(obj2,':',1:3);
                 obj.alpha = idx2(obj2,':',4);
             elseif isa(obj2,'xImage')
-                % Stip metadata from jImages
+                % Stip metadata from xImages
                 obj.data = obj2.data;
                 obj.colorSpace = obj2.colorSpace;
                 obj.isLinear = obj2.isLinear;

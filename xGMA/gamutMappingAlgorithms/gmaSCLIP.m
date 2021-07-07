@@ -33,7 +33,7 @@ function [imgGamutMapped] = gmaSCLIP(img,mappingColorSpace, varargin)
     
     %% find all OOG colors of the input img, disp number
     oogPx = img.select(not(img.isInGamut)); % store all OOG colors in oogPx
-    numPixelOOG = sum(not(img.isInGamut)) % get number of OOG pixels
+    numPixelOOG = sum(not(img.isInGamut)); % get number of OOG pixels
     
     %% convert OOG pixels to mapping color space
     oogPxMappingCS = oogPx.toXYZ.setColorSpace(mappingColorSpace).fromXYZ;
@@ -47,11 +47,11 @@ function [imgGamutMapped] = gmaSCLIP(img,mappingColorSpace, varargin)
     maxLightness = whitepoint.getPixel(2);
     
     % get the raw mapping point and calculate the center of the lightness axis
-    rawMappingPoint = [ maxLightness/2, 0, 0];
+    centerL = [ maxLightness/2, 0, 0];
     
     %% build mapping lines where P1 = OOG color and P2 = mappingDirection
     % create one point in center of lightness axis for each OOG color
-    mappingDirection = repmat(rawMappingPoint, numPixelOOG, 1);
+    mappingDirection = repmat(centerL, numPixelOOG, 1);
     
     % build mapping lines from OOG colors to center of lightness axis
     rawMappingLines = cat(2, oogRawPoints, mappingDirection);
@@ -78,26 +78,27 @@ function [imgGamutMapped] = gmaSCLIP(img,mappingColorSpace, varargin)
     idxList = not(img.isInGamut);
     imgGamutMapped = img; %#ok<NASGU>
     imgGamutMapped = insert(img, intersectionP, idxList);
+    
+    disp([num2str(sum(idxList)), 'pixels have been mapped'])
    
     %% visualization of mapping
-    if nargin > 2
-        for i = 1:size(varargin(1))
-                switch lower(varargin{i,1}{1})
-                    case {'visualize', 'vis'} % check for varargin 'vis'/'visualize'
-                        figure;
-                        ghmCS.show(xPixel(gamutHullTargetCS), 0.2) % plot gamut hull with color information and line thickness of 0.2
-                        mappingLines.show % plot mapping lines
-                        interP = xPoint([intersectMappingSpace.getPixel]) % create xPoint obj with intersection points
-                        hold on
-                        show(interP, [0.4 1 0.2], 30) % plot intersection points
-                        
-                        % set names of plotting axis to names of mapping CS
-                        xlabel(mappingColorSpace.getAxisName(1));
-                        ylabel(mappingColorSpace.getAxisName(2));
-                        zlabel(mappingColorSpace.getAxisName(3));
-               end
+    if nargin >= 3
+        if isa(varargin{1}, 'char')
+            switch lower(varargin{1})
+                case {'visualize', 'vis'} % check for varargin 'vis'/'visualize'
+                    figure;
+                    ghmCS.show(xPixel(gamutHullTargetCS), 0.2); % plot gamut hull with color information and line thickness of 0.2
+                    mappingLines.show; % plot mapping lines
+                    interP = xPoint([intersectMappingSpace.getPixel]); % create xPoint obj with intersection points
+                    hold on
+                    show(interP, [0.4 1 0.2], 30); % plot intersection points
+
+                    % set names of plotting axis to names of mapping CS
+                    xlabel(mappingColorSpace.getAxisName(1));
+                    ylabel(mappingColorSpace.getAxisName(2));
+                    zlabel(mappingColorSpace.getAxisName(3));
+            end
         end
-    end
-    
+    end 
 end
 

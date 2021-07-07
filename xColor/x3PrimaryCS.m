@@ -558,7 +558,7 @@ classdef x3PrimaryCS < xColorSpace
             
             %% Scale Conversion matrix
             M = [S';S';S'].*[Xr Xg Xb;Yr Yg Yb;Zr Zg Zb]/Yw;
-            % disp(M)
+            %disp(M)
         end
         
         
@@ -644,7 +644,7 @@ classdef x3PrimaryCS < xColorSpace
                     vertices = cat(1,pp{1}.getPixel, pp{2}.getPixel, pp{3}.getPixel,...
                         pp{4}.getPixel, pp{5}.getPixel, pp{6}.getPixel);
                     
-                    % Building Bloch 1: Start setting up index for all starting points
+                    % Building Block 1: Start setting up index for all starting points
                     bVec = (1:1:(precision-1)*precision)';
                     % Building Block 2: Offset to account for step from plane border to next line
                     offs = reshape(repmat(1:1:precision,(precision-1),1),1,precision*(precision-1))';
@@ -768,7 +768,7 @@ classdef x3PrimaryCS < xColorSpace
                     %disp('Linearizeing Others')
                 end
             end
-        end 
+        end
         
         %% Implement 'equal' '=='
         function value = eq(obj1,obj2)

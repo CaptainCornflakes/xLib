@@ -29,7 +29,7 @@ function img = XYZ2OKLAB(img)
 %% ----------------------------------------------------------------------
     
 %% --- INITS --------------------------------------------------------------
-warning('XYZ2Oklab is defined for D65 whitepoint and Y = 1')
+disp('XYZ2Oklab is defined for D65 whitepoint and Y = 1')
 [img,meta] = img2raw(img); %img2raw: img is pixel data, meta stores xObj info
 
 

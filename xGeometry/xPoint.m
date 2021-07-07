@@ -15,7 +15,7 @@ classdef xPoint < xBase
             else
                 obj = xPoint();
                 obj = obj.setPoint(varargin{:});
-                disp('xPoint created.')
+                %disp('xPoint created.')
             end
         end
         

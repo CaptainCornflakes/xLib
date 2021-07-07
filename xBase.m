@@ -330,7 +330,7 @@ methods(Static)
                 path = 'S:/GoogleDrive/jLib';
 
             otherwise
-                error('Define Paths for your machine in jBase before using the jFramework')
+                error('Define Paths for your machine in xBase before using the xFramework')
         end
     end
 
@@ -339,7 +339,7 @@ methods(Static)
         [~,hostName] = system('hostname');
         switch lower(strtrim(hostName))
             case 'desktop-50mdv02'
-                path = 'D:/02_Studium/_bachelor_thesis/xLib/TestImages'
+                path = 'D:/02_Studium/_bachelor_thesis/xLib/TestImages';
 
             case { 'jansmacbookpro.local', 'jansmacbookpro.fritz.box' }
                 path = '/Volumes/Yosemite/Users/Jan/Google Drive/System/TestImages';
@@ -348,7 +348,7 @@ methods(Static)
             case 'jans-macbook-pro.local'
                 path = '/Users/Jan/Box Sync/TestImages';
             otherwise
-                error('Define Paths for your machine in jBase before using the jFramework')
+                error('Define Paths for your machine in xBase before using the xFramework')
         end
 
     end

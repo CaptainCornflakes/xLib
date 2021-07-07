@@ -16,6 +16,7 @@ classdef xImage < xPixel
     methods
         %% constructor method
         function obj = xImage(varargin)
+                       
             % no input args
             if nargin == 0
                 % init
@@ -28,11 +29,16 @@ classdef xImage < xPixel
                                 .setHistory('reading MATLAB example image: peppers.png')...
                                 .setColorSpace('sRGB').setName('MATLAB_Peppers.png').linearize;
                         
+                        case {'ski', 'skisrgb'};
+                            obj = xImage();
+                            obj = obj.read(fullfile(xBase.getImagePath(), 'Ski_TC8-03_sRGB.tif')) ...
+                                    .setColorSpace(x3PrimaryCS('srgb'));
+                            
                         case {'isabellarec709', 'isabella709', 'isabellarec'}
+                            obj.name = 'Isabella_rec709.dpx'
                             obj = xImage();
                             obj = obj.read(fullfile(xBase.getImagePath(), 'isabella_rec709.dpx')) ...
                                     .setColorSpace(x3PrimaryCS('rec709'));
-                                
                                 
                         case {'isabella', 'isabella_logc',}
                             obj = xImage();
@@ -42,7 +48,7 @@ classdef xImage < xPixel
                         case('testcolors')
                             %obj = xImage();
                             obj.name = 'testcolors';
-                            obj.data = xPixel([0 0 0; 0.18 0.18 0.18; 0.5 0.5 0.5; 1 0 0 ; 0 1 0; 0 0 1; 1 1 1]).getData;
+                            obj.data = [0 0 0; 0.18 0.18 0.18; 0.5 0.5 0.5; 1 0 0 ; 0 1 0; 0 0 1; 1 1 1];
                             obj.history = obj.setHistory('testcolors created');
                             obj.isLinear = 1;
                             obj.colorSpace = x3PrimaryCS('sRGB');
@@ -164,7 +170,7 @@ classdef xImage < xPixel
                     obj.data = reshape(image,[],3);
                 elseif size(image,3) == 4
                     obj.data = reshape(image(:,:,1:3),[],3);
-                    obj.alpha = reshape(image(:,:,4),[],1);;
+                    obj.alpha = reshape(image(:,:,4),[],1);
                 else
                     error(['xImage.setImage: Images must be n*m*3 or n*m*4. This image is n*m*'... 
                         num2str(size(image,3))])
@@ -270,7 +276,7 @@ classdef xImage < xPixel
                 im = img.getImage;
                 img = img.setImage( im( targetHeight, targetWidth, : ) );
             else
-                error('Wrong input paramaters for jImage.crop')
+                error('Wrong input paramaters for xImage.crop')
             end
         end
         
