@@ -467,7 +467,7 @@ classdef x3PrimaryCS < xColorSpace
             end
         end
         
-         %% get isInGamut (Only works in linear domain!)
+         %% get isInGamut (only works in linear domain!)
         function fun = get.isInGamut(obj)
             switch lower(obj.name)
                 case {'dcixyz'}
@@ -709,7 +709,7 @@ classdef x3PrimaryCS < xColorSpace
             %             % RGB Colors
             %             Colors = cat(2,g3D,ones(length(g3D),1));
             %
-            %             myP = jPlot3D('Gamut Plot', 800,1200, 100,100, [0.2 0.2 0.2]);
+            %             myP = xPlot3D('Gamut Plot', 800,1200, 100,100, [0.2 0.2 0.2]);
             %             myP.setView('sRGB');
             %             myP.setAxis('sRGB');
             %
@@ -740,20 +740,6 @@ classdef x3PrimaryCS < xColorSpace
                 %converted to the right colorspace
             else
                 %% Modify to some special gamut Boundaries:
-                switch lower(obj.name)
-                    case 'dcixyz'
-                        if strcmpi(type,'pointplanes')
-                            for i=1:1:6
-                                geom{i} = geom{i}.clamp([0 0 0],[1 48/52.37 1].^(1/2.6)); % Assuming perceptual coding
-                            end
-                        else
-                            geom = geom.clamp([0 0 0],[1 48/52.37 1].^(1/2.6)); % Assuming perceptual coding
-                        end
-                        %% PQ encodings are absolute , so set right Black and White Points in perceptual domain
-                    otherwise
-                        disp('no special gamut bounrady modification executed')
-                end
-                
                 %% Linearize
                 if strcmpi(type,'pointplane')
                     %disp('Linearizeing Pointplanes')

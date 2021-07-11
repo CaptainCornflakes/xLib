@@ -80,19 +80,8 @@ classdef xPixel < xBase
                 obj.name = obj2.name;
                 obj.path = obj2.path;
                 obj.history = obj2.history;
-%             elseif isa(obj2,'xEllipsoid3D')
-%                 % Only vertices copied, idx lost!
-%                 obj.data = obj2.data;
-%                 obj.name = obj2.name;
-%                 obj.path = obj2.path;
-%                 obj.history = obj2.history;
-%             elseif isa(obj2,'xCLUT')
-%                 obj.data = reshape(obj2.data,[],3);
-%                 obj.name = obj2.name;
-%                 obj.path = obj2.path;
-%                 obj.history = obj2.history;
             elseif isa(obj2, 'xPixel')
-                % We already have a jPixel
+                % xPixel already there
                 obj = obj2;
             else
                 error('Calling xPixel.setPixel is currently only supported for single or double n*3 or n*4 vectors. Try xImage for n*m*3')

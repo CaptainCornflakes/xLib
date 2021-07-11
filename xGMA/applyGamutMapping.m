@@ -3,7 +3,7 @@ function [ imgGamutMapped ] = applyGamutMapping(img, gmaName, mappingColorSpace,
 % applyGamutMapping is performed after converting the image to the desiered
 % destination colorspace
 %   inputs are img, gmaName and varargin
-%   valid gmaNames are:
+%   valid gmaNames to this date are:
 %       - 'SCLIP'
 
 % warning
@@ -16,8 +16,8 @@ end
 mappingColorSpace = xCamCS(mappingColorSpace).setAdaptationWhite(img.getColorSpace.getAdaptationWhite);
 
 %% TODO:
-    % - fallunterscheidung xPixel, xImage?
-    % - variable precision of gamut hull as varargin
+    % - different cases for xPixel, xImage
+    % - variable precision of gamut hull
 % select GMA
 switch lower(gmaName)
     case 'sclip'

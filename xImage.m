@@ -27,15 +27,16 @@ classdef xImage < xPixel
                         case 'peppers'
                             obj = xImage(double(imread('peppers.png'))/255)...
                                 .setHistory('reading MATLAB example image: peppers.png')...
-                                .setColorSpace('sRGB').setName('MATLAB_Peppers.png').linearize;
+                                .setColorSpace('sRGB').setName('MATLAB_Peppers').linearize;
                         
                         case {'ski', 'skisrgb'};
                             obj = xImage();
                             obj = obj.read(fullfile(xBase.getImagePath(), 'Ski_TC8-03_sRGB.tif')) ...
                                     .setColorSpace(x3PrimaryCS('srgb'));
+                            obj.name = 'Ski_TC8-03_sRGB';
                             
                         case {'isabellarec709', 'isabella709', 'isabellarec'}
-                            obj.name = 'Isabella_rec709.dpx'
+                            obj.name = 'Isabella_rec709';
                             obj = xImage();
                             obj = obj.read(fullfile(xBase.getImagePath(), 'isabella_rec709.dpx')) ...
                                     .setColorSpace(x3PrimaryCS('rec709'));
@@ -147,7 +148,7 @@ classdef xImage < xPixel
                     obj = obj.setImage(varargin{:});
                 end
             else
-                disp('Calling xImage contructor with more than two arguments is currently not supported')
+                disp('Calling xImage constructor with more than two arguments is currently not supported')
             end             
         end
         
@@ -217,7 +218,7 @@ classdef xImage < xPixel
         %% concatenate image
         % horizontal
         function img = horzcat(img, img2)
-            img = img.setImage(cat(2, img.getImage, img2.getimage));
+            img = img.setImage(cat(2, img.getImage, img2.getImage));
         end
         
         %vertical
@@ -335,12 +336,6 @@ classdef xImage < xPixel
                     else
                         graticule = 'PQ';
                     end
-                
-                %---------------------------------------
-                % jImage line 370-434 not yet checked: waveform
-                % implementation, graticules, ...
-                %---------------------------------------
-                
                 otherwise
                     myP = xPixel(Img).show(mode,varargin{:});
             end

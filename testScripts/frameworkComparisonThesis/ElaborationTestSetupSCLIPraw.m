@@ -121,7 +121,6 @@ ghOklab.triangles = ghOklabReshaped;
 % convert OOG pixels to Oklab
 pxOklab = XYZ2OKLAB(pxXYZ);
 
-
 %% SCLIP GAMUT MAPPING ----------------------------------------------------
 
 %% PREPARE GAMUT MAPPING
@@ -264,7 +263,7 @@ imgMapped = linear2sRGB(imgMappedLin);
 
 
 %% RESHAPE IMG TO STANDARD REPRESENTATION OF IMAGES IN MATLAB
-imgFinal = reshape(imgMapped, height, width, 3);
+imgFinalRaw = reshape(imgMapped, height, width, 3);
 
 
 % elapsed time

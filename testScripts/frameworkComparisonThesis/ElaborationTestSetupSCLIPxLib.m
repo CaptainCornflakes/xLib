@@ -9,7 +9,7 @@
 %% GET TEST-IMG --------------------------------------------------------
 imgTest = getTestImageTestSetupSCLIP();
 
-% timer start
+%% timer start
 tic
 %% ------------------------------------------------------------------------
 %% ELABORATION STARTS HERE ------------------------------------------------
@@ -22,13 +22,13 @@ img = xImage(imgTest).setColorSpace(x3PrimaryCS('sRGB').setBlackLevel(0)...
 imgLin = img.linearize;
 
 %PERFORM GAMUT MAPPING
-imgMappedLin = applyGamutMapping(imgLin, 'SCLIP', 'oklab');
+imgMappedLin = applyGamutMapping(imgLin, 'SCLIP', 'oklab', 'vis');
 
 % DELINEARIZE MAPPED IMG
 imgMapped = imgMappedLin.deLinearize;
 
 % RESHAPE IMG TO STANDARD REPRESENTATION OF IMAGES IN MATLAB
-imgFinal = imgMapped.getImage;
+imgFinalxLib = imgMapped.getImage;
 
 % elapsed time
 timexLib = toc
