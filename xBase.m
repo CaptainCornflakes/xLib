@@ -320,17 +320,11 @@ methods(Static)
         [~,hostName] = system('hostname');
         switch lower(strtrim(hostName))
 
-            case {'desktop-50mdv02'}
-               path = 'D:/02_Studium/_bachelor_thesis/xLib' 
-
-            case {'jansmacbookpro.local', 'jans-mbp.fritz.box', 'jans-macbook-pro.local',...
-                    'ipad-von-christine.fritz.box'}
-                path = '/Users/jan/WorkSpace/jLib';
-            case { 'jan-x99', 'nhf5pqc2' }
-                path = 'S:/GoogleDrive/jLib';
-
+            case 'desktop-50mdv02'
+               path = 'D:/02_Studium/_bachelor_thesis/xLib';
+               
             otherwise
-                error('Define Paths for your machine in xBase before using the xFramework')
+                error('Define Paths for your machine in xBase before using the xLib framework')
         end
     end
 
@@ -339,16 +333,10 @@ methods(Static)
         [~,hostName] = system('hostname');
         switch lower(strtrim(hostName))
             case 'desktop-50mdv02'
-                path = 'D:/02_Studium/_bachelor_thesis/xLib/TestImages';
+                path = 'D:/02_Studium/_bachelor_thesis/xLib/testImages';
 
-            case { 'jansmacbookpro.local', 'jansmacbookpro.fritz.box' }
-                path = '/Volumes/Yosemite/Users/Jan/Google Drive/System/TestImages';
-            case { 'jan-x99', 'nhf5pqc2' }
-                path = 'S:/GoogleDrive/System/TestImages';
-            case 'jans-macbook-pro.local'
-                path = '/Users/Jan/Box Sync/TestImages';
             otherwise
-                error('Define Paths for your machine in xBase before using the xFramework')
+                error('Define Paths for your machine in xBase before using the xLib framework')
         end
 
     end
