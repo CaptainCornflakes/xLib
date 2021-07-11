@@ -106,7 +106,7 @@ classdef xImage < xPixel
                     obj.history = varargin{1}.history;
                     
                 % --- TODO: ----------------------------------------------- 
-                % --- if object is xCLUT ----------------------------------
+                % ---  xCLUT ----------------------------------
                 % --------------------------------------------------------- 
                 
                 % if object is matlab.ui.figure
@@ -152,7 +152,7 @@ classdef xImage < xPixel
             end             
         end
         
-        %% get/setImage
+        %% set/getImage
         %setImage 
         function obj = setImage(obj, image, metadata)
             % get back metadata if supplied or xImage if not
@@ -340,6 +340,8 @@ classdef xImage < xPixel
                     myP = xPixel(Img).show(mode,varargin{:});
             end
         end
+        
+        
         
         function obj = read(obj,imgPath,imgName)
             %% xImage.imRead for reading different file formats
